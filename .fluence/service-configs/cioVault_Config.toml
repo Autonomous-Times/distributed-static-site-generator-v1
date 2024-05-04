@@ -1,0 +1,12 @@
+total_memory_limit = "2GB"
+
+[[module]]
+name = "cioVault"
+load_from = "/home/joera/Documents/dsg/fluence/target/wasm32-wasi/release/cioVault.wasm"
+
+[module.wasi.mapped_dirs]
+"/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioVault/service/tmp"
+"/storage" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioVault/service/storage"
+"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioVault/modules/cioVault/tmp/module"
+"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioVault/modules/cioVault/storage/module"
+"/tmp/vault" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/particles"

@@ -1,0 +1,285 @@
+aqua Services declares *
+
+
+data AMResponse:
+  success: bool
+  result_raw: string
+  result: string
+  timestamp: i64
+  host_id: string
+
+service CioKubo("cioKubo"):
+  add(ipfs_api: string, content: string) -> string
+  addRecursive(ipfs_api: string, path_: string) -> string
+  get(ipfs_api: string, cid: string) -> string
+  getRecursive(ipfs_api: string, cid: string, path_: string) -> string
+  hash(ipfs_api: string, path_: string) -> AMResponse
+
+
+data AquaMarineResult:
+  output: [][]u8
+  results: []string
+  errors: []string
+
+data TuContentItem:
+  id: string
+  slug: string
+  publication: string
+  author: string
+  post_type: string
+  tags: string
+  categories: string
+  parent: string
+  creation_date: string
+  modified_date: string
+  content_cid: string
+
+data TuDsgCollection:
+  source: string
+  key: string
+  value: string
+  query: string
+
+data TuDsgRipple:
+  query: string
+  value: string
+  post_type: string
+
+data TuDsgTable:
+  id: string
+  gateway: string
+  owner: string
+
+service TuContentStore("tuContentStore"):
+  batch_insert(content: TuContentItem, table: TuDsgTable) -> AquaMarineResult
+  insert(content: TuContentItem, table: TuDsgTable, gateway: string) -> AquaMarineResult
+  queryCollection(collection: TuDsgCollection, table: TuDsgTable) -> []TuContentItem
+  queryCollectionCids(collection: TuDsgCollection, table: TuDsgTable) -> AquaMarineResult
+  queryRipple(ripple: TuDsgRipple, table: TuDsgTable, gateway: string) -> []TuContentItem
+
+
+data TuContentItem:
+  id: string
+  slug: string
+  publication: string
+  author: string
+  post_type: string
+  tags: string
+  categories: string
+  parent: string
+  creation_date: string
+  modified_date: string
+  content_cid: string
+
+data TuDsgAuthorData:
+  name: string
+  repository: string
+  content_mappings: string
+
+data TuDsgCollection:
+  source: string
+  key: string
+  value: string
+  query: string
+
+data TuDsgDns:
+  custodian: string
+  item_id: string
+  auth_key: string
+
+data TuDsgDomain:
+  url: string
+  dns: TuDsgDns
+
+data TuDsgMapped:
+  item: TuContentItem
+  body: string
+
+data TuDsgRipple:
+  query: string
+  value: string
+  post_type: string
+
+data TuDsgTemplate:
+  reference: string
+  file: string
+  path: string
+  collections: []TuDsgCollection
+  ripples: []TuDsgRipple
+
+data TuDsgTable:
+  id: string
+  gateway: string
+  owner: string
+
+data TuDsgPublication:
+  assets: string
+  domains: []TuDsgDomain
+  governor: string
+  mapping: []TuDsgTemplate
+  name: string
+  templates: string
+  table: TuDsgTable
+
+data TuDsgPublishTask:
+  slug: string
+  author: TuDsgAuthorData
+  payload: string
+  post_type: string
+  publication: TuDsgPublication
+
+data TuDsgRenderObject:
+  name: string
+  post_type: string
+  template: TuDsgTemplate
+  publication_name: string
+  domain: TuDsgDomain
+  body_cid: string
+
+service TuDsgContent("tuDsgContent"):
+  includeCid(content: TuContentItem, cid: string) -> TuContentItem
+  map(task: TuDsgPublishTask, mappings: string) -> TuDsgMapped
+  pebble(task: TuDsgPublishTask, contentItem: TuContentItem) -> []TuDsgRenderObject
+  ripple(task: TuDsgPublishTask, ripple: TuDsgRipple, contentItem: TuContentItem) -> []TuDsgRenderObject
+
+
+data AMResponse:
+  success: bool
+  result_raw: string
+  result: string
+  timestamp: i64
+  host_id: string
+
+service CioPinata("cioPinata"):
+  addAsFile(content: string, name: string, pinataJWTKey: string) -> AMResponse
+  addFolder(folder: string, pinataJWTKey: string) -> AMResponse
+
+
+data AquaMarineResult:
+  output: [][]u8
+  results: []string
+  errors: []string
+
+data TuContentItem:
+  id: string
+  slug: string
+  publication: string
+  author: string
+  post_type: string
+  tags: string
+  categories: string
+  parent: string
+  creation_date: string
+  modified_date: string
+  content_cid: string
+
+data TuDsgCollection:
+  source: string
+  key: string
+  value: string
+  query: string
+
+data TuDsgDns:
+  custodian: string
+  item_id: string
+  auth_key: string
+
+data TuDsgDomain:
+  url: string
+  dns: TuDsgDns
+
+data TuDsgRipple:
+  query: string
+  value: string
+  post_type: string
+
+data TuDsgTemplate:
+  reference: string
+  file: string
+  path: string
+  collections: []TuDsgCollection
+  ripples: []TuDsgRipple
+
+data TuDsgTable:
+  id: string
+  gateway: string
+  owner: string
+
+data TuDsgPublication:
+  assets: string
+  domains: []TuDsgDomain
+  governor: string
+  mapping: []TuDsgTemplate
+  name: string
+  templates: string
+  table: TuDsgTable
+
+data TuDsgRenderObject:
+  name: string
+  post_type: string
+  template: TuDsgTemplate
+  publication_name: string
+  domain: TuDsgDomain
+  body_cid: string
+
+service TuDsgRenderer("tuDsgRenderer"):
+  map(ro: TuDsgRenderObject, body_: string, content: [][]TuContentItem, publication: TuDsgPublication) -> AquaMarineResult
+  single(ro: TuDsgRenderObject, td: []u8) -> AquaMarineResult
+
+
+service CioVault("cioVault"):
+  dir(path: string) -> bool
+  inspect(path: string) -> []string
+  write(data: string, path: string) -> bool
+
+
+data AMResponse:
+  success: bool
+  result_raw: string
+  result: string
+  timestamp: i64
+  host_id: string
+
+data TuDsgCollection:
+  source: string
+  key: string
+  value: string
+  query: string
+
+data TuDsgDns:
+  custodian: string
+  item_id: string
+  auth_key: string
+
+data TuDsgDomain:
+  url: string
+  dns: TuDsgDns
+
+data TuDsgRipple:
+  query: string
+  value: string
+  post_type: string
+
+data TuDsgTemplate:
+  reference: string
+  file: string
+  path: string
+  collections: []TuDsgCollection
+  ripples: []TuDsgRipple
+
+data TuDsgTable:
+  id: string
+  gateway: string
+  owner: string
+
+data TuDsgPublication:
+  assets: string
+  domains: []TuDsgDomain
+  governor: string
+  mapping: []TuDsgTemplate
+  name: string
+  templates: string
+  table: TuDsgTable
+
+service TuDsgWebHost("tuDsgWebHost"):
+  update(publication: TuDsgPublication, cid: string) -> AMResponse

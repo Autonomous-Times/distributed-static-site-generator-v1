@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=schemas/workers.json
+
+# A result of app deployment. This file is created automatically after successful deployment using `fluence workers deploy` command
+
+# Documentation: https://github.com/fluencelabs/cli/tree/main/docs/configs/workers.md
+
+version: 1
+
+deals:
+  {
+    local:
+      {
+        contentWorkerV1:
+          {
+            definition: bafkreia5c52u2m3gh6qyhncgy4szkg57ggbzn2kihsksuba4pfat3kkn5q,
+            timestamp: 2024-05-04T07:28:25.428Z,
+            dealIdOriginal: "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
+            dealId: ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b,
+            chainNetworkId: 31337,
+            matched: true
+          },
+        renderWorkerV0:
+          {
+            definition: bafkreiglu5sthn4hyfcnfr7rqofl5dlyppinlwxpkwjyij2dqp26bto67u,
+            timestamp: 2024-05-04T08:06:32.202Z,
+            dealIdOriginal: "0x18998c7E38ede4dF09cEec08E5372Bf8fe5719ea",
+            dealId: 18998c7e38ede4df09ceec08e5372bf8fe5719ea,
+            chainNetworkId: 31337
+          },
+        webHostWorkerV0:
+          {
+            definition: bafkreifr2ugjrg5m4b52dyhrat4mq3bbyv6537h6yildw3f2gy2zvsqmka,
+            timestamp: 2024-05-04T08:06:36.468Z,
+            dealIdOriginal: "0x2901bb75a1f4B0ac205CB2e68986A53E3480eB56",
+            dealId: 2901bb75a1f4b0ac205cb2e68986a53e3480eb56,
+            chainNetworkId: 31337
+          }
+      }
+  }

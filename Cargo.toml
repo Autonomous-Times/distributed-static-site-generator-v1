@@ -1,0 +1,10 @@
+[workspace]
+members = [
+  "src/services/cioKubo/modules/cioKubo",
+  "src/services/tuContentStore/modules/tuContentStore",
+  "src/services/tuDsgContent/modules/tuDsgContent",
+  "src/services/cioPinata/modules/cioPinata",
+  "src/services/tuDsgRenderer/modules/tuDsgRenderer",
+  "src/services/cioVault/cioVault",
+  "src/services/tuDsgWebHost/modules/tuDsgWebHost"
+]

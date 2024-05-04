@@ -1,0 +1,54 @@
+aqua Deals declares *
+
+data ContentWorkerV1:
+    chainNetworkId: u64
+    dealId: string
+    dealIdOriginal: string
+    definition: string
+    matched: bool
+    timestamp: string
+
+data RenderWorkerV0:
+    chainNetworkId: u64
+    dealId: string
+    dealIdOriginal: string
+    definition: string
+    timestamp: string
+
+data WebHostWorkerV0:
+    chainNetworkId: u64
+    dealId: string
+    dealIdOriginal: string
+    definition: string
+    timestamp: string
+
+data Deals:
+    contentWorkerV1: ?ContentWorkerV1
+    renderWorkerV0: ?RenderWorkerV0
+    webHostWorkerV0: ?WebHostWorkerV0
+
+func get() -> Deals:
+    <- Deals(
+        contentWorkerV1=?[ContentWorkerV1(
+            definition="bafkreia5c52u2m3gh6qyhncgy4szkg57ggbzn2kihsksuba4pfat3kkn5q",
+            timestamp="2024-05-04T07:28:25.428Z",
+            dealIdOriginal="0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
+            dealId="ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b",
+            chainNetworkId=31337,
+            matched=true
+        )],
+        renderWorkerV0=?[RenderWorkerV0(
+            timestamp="2024-05-04T08:06:32.202Z",
+            definition="bafkreiglu5sthn4hyfcnfr7rqofl5dlyppinlwxpkwjyij2dqp26bto67u",
+            chainNetworkId=31337,
+            dealIdOriginal="0x18998c7E38ede4dF09cEec08E5372Bf8fe5719ea",
+            dealId="18998c7e38ede4df09ceec08e5372bf8fe5719ea"
+        )],
+        webHostWorkerV0=?[WebHostWorkerV0(
+            timestamp="2024-05-04T08:06:36.468Z",
+            definition="bafkreifr2ugjrg5m4b52dyhrat4mq3bbyv6537h6yildw3f2gy2zvsqmka",
+            chainNetworkId=31337,
+            dealIdOriginal="0x2901bb75a1f4B0ac205CB2e68986A53E3480eB56",
+            dealId="2901bb75a1f4b0ac205cb2e68986a53e3480eb56"
+        )]
+    )

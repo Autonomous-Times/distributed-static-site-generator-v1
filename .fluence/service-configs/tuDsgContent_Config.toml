@@ -1,0 +1,12 @@
+total_memory_limit = "2GB"
+
+[[module]]
+name = "tuDsgContent"
+load_from = "/home/joera/Documents/dsg/fluence/target/wasm32-wasi/release/tuDsgContent.wasm"
+
+[module.wasi.mapped_dirs]
+"/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuDsgContent/service/tmp"
+"/storage" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuDsgContent/service/storage"
+"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuDsgContent/modules/tuDsgContent/tmp/module"
+"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuDsgContent/modules/tuDsgContent/storage/module"
+"/tmp/vault" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/particles"

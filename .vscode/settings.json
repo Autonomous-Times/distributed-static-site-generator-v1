@@ -1,0 +1,8 @@
+{
+  "aquaSettings.imports": [
+    "/home/joera/Documents/dsg/fluence/.fluence/aqua",
+    "/home/joera/.fluence/npm/@fluencelabs/aqua-lib/0.7.7/node_modules",
+    "/home/joera/.fluence/npm/@fluencelabs/spell/0.5.28/node_modules",
+    "/home/joera/.fluence/npm/@fluencelabs/registry/0.8.7/node_modules"
+  ]
+}

@@ -1,0 +1,51 @@
+aqua ManualServices declares *
+
+import "./types"
+-- import "../../.fluence/aqua/services.aqua"
+
+service TuDsgPublicationFromJson("json"):
+  parse(s: string) -> TuDsgPublication
+
+service TuDsgAuthorFromJson("json"):
+  parse(s: string) -> TuDsgAuthorData
+
+service TuDsgContentToJson("json"):
+  parse(c: TuContentItem) -> string
+
+service TuDsgContent("tuDsgContent"):
+  includeCid(content: TuContentItem, cid: string) -> TuContentItem
+  map(task: TuDsgPublishTask, mappings: string) -> TuDsgMapped
+  pebble(task: TuDsgPublishTask, contentItem: TuContentItem) -> []TuDsgRenderObject
+  ripple(task: TuDsgPublishTask, ripple: TuDsgRipple, contentItem: TuContentItem) -> []TuDsgRenderObject
+
+service TuContentStore("tuContentStore"):
+  batch_insert(content: TuContentItem, table: TuDsgTable) -> AquaMarineResult
+  insert(content: TuContentItem, table: TuDsgTable, gateway: string) -> AquaMarineResult
+  queryCollection(collection: TuDsgCollection, table: TuDsgTable) -> []TuContentItem
+  queryCollectionCids(collection: TuDsgCollection, table: TuDsgTable) -> AquaMarineResult
+  queryRipple(ripple: TuDsgRipple, table: TuDsgTable, gateway: string) -> []TuContentItem
+
+service TuDsgRenderer("tuDsgRenderer"):
+  map(ro: TuDsgRenderObject, body_: string, content: [][]TuContentItem, publication: TuDsgPublication) -> AquaMarineResult
+  single(ro: TuDsgRenderObject, td: []u8) -> AquaMarineResult
+
+service CioKubo("cioKubo"):
+  add(ipfs_api: string, content: string) -> string
+  addRecursive(ipfs_api: string, path_: string) -> string
+  get(ipfs_api: string, cid: string) -> string
+  getRecursive(ipfs_api: string, cid: string, path_: string) -> string
+  hash(ipfs_api: string, path_: string) -> AMResponse
+
+service CioPinata("cioPinata"):
+  addAsFile(content: string, name: string, pinataJWTKey: string) -> AMResponse
+  addFolder(folder: string, pinataJWTKey: string) -> AMResponse
+
+service CioVault("cioVault"):
+  dir(path: string) -> bool
+  inspect(path: string) -> []string
+  write(data: string, path: string) -> bool
+
+service TuDsgWebHost("tuDsgWebHost"):
+  update(publication: TuDsgPublication, cid: string) -> AMResponse
+
+
