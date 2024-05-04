@@ -1,4 +1,4 @@
-# Autonomous times
+# Autonomous Times
 
 Opinions are wonderful. The infrastructure to share, collaborate and publish opinions should be neutral, as in void of opinions and autonomous as in not dependent on single people, i.e. sufficiently decentralised. 
 
