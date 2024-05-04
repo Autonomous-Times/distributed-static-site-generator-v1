@@ -1,9 +1,12 @@
 # Autonomous times
 
+Opinions are wonderful. The infrastructure to share, collaborate and publish opinions should be neutral, as in void of opinions and autonomous as in not dependent on single people, i.e. sufficiently decentralised. 
 
-comprehensive approach to collaborative writing and publishing
+The illusionary contradiction here is that with neutral infrastructure, ownership and agency of authors is much greater. Publishing or rather being part of publishing is making decisions in a collaborative setting. 
 
-primitives for sharing of markdown texts that are:
+This is the project i keep coming back to: a comprehensive approach to collaborative writing and publishing
+
+So, what we'r exploring is: primitives for sharing of markdown texts that are:
 
 * versioned
 * encrypted
