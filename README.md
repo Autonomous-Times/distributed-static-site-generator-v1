@@ -1,5 +1,6 @@
 # Autonomous times
 
+
 comprehensive approach to collaborative writing and publishing
 
 primitives for sharing of markdown texts that are:
