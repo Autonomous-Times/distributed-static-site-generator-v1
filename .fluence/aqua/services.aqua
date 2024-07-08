@@ -16,13 +16,14 @@ service CioKubo("cioKubo"):
   hash(ipfs_api: string, path_: string) -> AMResponse
 
 
-data AquaMarineResult:
-  output: [][]u8
-  results: []string
-  errors: []string
+data DsgCollection:
+  source: string
+  key: string
+  value: string
+  query: string
 
-data TuContentItem:
-  id: string
+data DsgContentItem:
+  title: string
   slug: string
   publication: string
   author: string
@@ -34,121 +35,22 @@ data TuContentItem:
   modified_date: string
   content_cid: string
 
-data TuDsgCollection:
-  source: string
-  key: string
-  value: string
-  query: string
-
-data TuDsgRipple:
+data DsgRipple:
   query: string
   value: string
   post_type: string
 
-data TuDsgTable:
+data DsgTable:
   id: string
   gateway: string
   owner: string
 
 service TuContentStore("tuContentStore"):
-  batch_insert(content: TuContentItem, table: TuDsgTable) -> AquaMarineResult
-  insert(content: TuContentItem, table: TuDsgTable, gateway: string) -> AquaMarineResult
-  queryCollection(collection: TuDsgCollection, table: TuDsgTable) -> []TuContentItem
-  queryCollectionCids(collection: TuDsgCollection, table: TuDsgTable) -> AquaMarineResult
-  queryRipple(ripple: TuDsgRipple, table: TuDsgTable, gateway: string) -> []TuContentItem
+  insert(content: DsgContentItem, dsg_table: DsgTable, optimistic: bool) -> AMResponse
+  queryCollection(collection: DsgCollection, table: DsgTable) -> AMResponse
+  queryCollectionCids(collection: DsgCollection, table: DsgTable) -> AMResponse
+  queryRipple(ripple: DsgRipple, table: DsgTable) -> AMResponse
 
-
-data TuContentItem:
-  id: string
-  slug: string
-  publication: string
-  author: string
-  post_type: string
-  tags: string
-  categories: string
-  parent: string
-  creation_date: string
-  modified_date: string
-  content_cid: string
-
-data TuDsgAuthorData:
-  name: string
-  repository: string
-  content_mappings: string
-
-data TuDsgCollection:
-  source: string
-  key: string
-  value: string
-  query: string
-
-data TuDsgDns:
-  custodian: string
-  item_id: string
-  auth_key: string
-
-data TuDsgDomain:
-  url: string
-  dns: TuDsgDns
-
-data TuDsgMapped:
-  item: TuContentItem
-  body: string
-
-data TuDsgRipple:
-  query: string
-  value: string
-  post_type: string
-
-data TuDsgTemplate:
-  reference: string
-  file: string
-  path: string
-  collections: []TuDsgCollection
-  ripples: []TuDsgRipple
-
-data TuDsgTable:
-  id: string
-  gateway: string
-  owner: string
-
-data TuDsgPublication:
-  assets: string
-  domains: []TuDsgDomain
-  governor: string
-  mapping: []TuDsgTemplate
-  name: string
-  templates: string
-  table: TuDsgTable
-
-data TuDsgPublishTask:
-  slug: string
-  author: TuDsgAuthorData
-  payload: string
-  post_type: string
-  publication: TuDsgPublication
-
-data TuDsgRenderObject:
-  name: string
-  post_type: string
-  template: TuDsgTemplate
-  publication_name: string
-  domain: TuDsgDomain
-  body_cid: string
-
-service TuDsgContent("tuDsgContent"):
-  includeCid(content: TuContentItem, cid: string) -> TuContentItem
-  map(task: TuDsgPublishTask, mappings: string) -> TuDsgMapped
-  pebble(task: TuDsgPublishTask, contentItem: TuContentItem) -> []TuDsgRenderObject
-  ripple(task: TuDsgPublishTask, ripple: TuDsgRipple, contentItem: TuContentItem) -> []TuDsgRenderObject
-
-
-data AMResponse:
-  success: bool
-  result_raw: string
-  result: string
-  timestamp: i64
-  host_id: string
 
 service CioPinata("cioPinata"):
   addAsFile(content: string, name: string, pinataJWTKey: string) -> AMResponse
@@ -160,71 +62,42 @@ data AquaMarineResult:
   results: []string
   errors: []string
 
-data TuContentItem:
-  id: string
-  slug: string
-  publication: string
-  author: string
-  post_type: string
-  tags: string
-  categories: string
-  parent: string
-  creation_date: string
-  modified_date: string
-  content_cid: string
-
-data TuDsgCollection:
-  source: string
-  key: string
-  value: string
-  query: string
-
-data TuDsgDns:
+data DsgDns:
   custodian: string
   item_id: string
   auth_key: string
 
-data TuDsgDomain:
+data DsgDomain:
   url: string
-  dns: TuDsgDns
+  dns: DsgDns
 
-data TuDsgRipple:
-  query: string
-  value: string
-  post_type: string
-
-data TuDsgTemplate:
+data DsgTemplate:
   reference: string
   file: string
   path: string
-  collections: []TuDsgCollection
-  ripples: []TuDsgRipple
+  collections: []DsgCollection
+  ripples: []DsgRipple
 
-data TuDsgTable:
-  id: string
-  gateway: string
-  owner: string
-
-data TuDsgPublication:
+data DsgPublication:
   assets: string
-  domains: []TuDsgDomain
+  domains: []DsgDomain
   governor: string
-  mapping: []TuDsgTemplate
+  mapping: []DsgTemplate
   name: string
   templates: string
-  table: TuDsgTable
+  table: DsgTable
 
-data TuDsgRenderObject:
+data DsgRenderObject:
   name: string
   post_type: string
-  template: TuDsgTemplate
+  template: DsgTemplate
   publication_name: string
-  domain: TuDsgDomain
+  domain: DsgDomain
   body_cid: string
 
 service TuDsgRenderer("tuDsgRenderer"):
-  map(ro: TuDsgRenderObject, body_: string, content: [][]TuContentItem, publication: TuDsgPublication) -> AquaMarineResult
-  single(ro: TuDsgRenderObject, td: []u8) -> AquaMarineResult
+  map(ro: DsgRenderObject, body_: string, content: [][]DsgContentItem, publication: DsgPublication) -> AquaMarineResult
+  single(ro: DsgRenderObject, td: []u8) -> AquaMarineResult
 
 
 service CioVault("cioVault"):
@@ -233,53 +106,51 @@ service CioVault("cioVault"):
   write(data: string, path: string) -> bool
 
 
-data AMResponse:
-  success: bool
-  result_raw: string
-  result: string
-  timestamp: i64
-  host_id: string
-
-data TuDsgCollection:
-  source: string
-  key: string
-  value: string
-  query: string
-
-data TuDsgDns:
-  custodian: string
-  item_id: string
-  auth_key: string
-
-data TuDsgDomain:
-  url: string
-  dns: TuDsgDns
-
-data TuDsgRipple:
-  query: string
-  value: string
-  post_type: string
-
-data TuDsgTemplate:
-  reference: string
-  file: string
-  path: string
-  collections: []TuDsgCollection
-  ripples: []TuDsgRipple
-
-data TuDsgTable:
-  id: string
-  gateway: string
-  owner: string
-
-data TuDsgPublication:
-  assets: string
-  domains: []TuDsgDomain
-  governor: string
-  mapping: []TuDsgTemplate
-  name: string
-  templates: string
-  table: TuDsgTable
-
 service TuDsgWebHost("tuDsgWebHost"):
-  update(publication: TuDsgPublication, cid: string) -> AMResponse
+  update(publication: DsgPublication, cid: string) -> AMResponse
+
+
+data EventLog:
+  address: string
+  block_number: string
+  params: []string
+  transaction_hash: string
+
+data AMEventLogResult:
+  success: bool
+  results: []EventLog
+  error: string
+
+service Npublication("nPublication"):
+  create_filter(contract_address: string, topic: string, latest_block: string, rpc_url: string) -> AMResponse
+  poll_filter(filter: string, rpc_url: string) -> AMEventLogResult
+  read_from_rpc(contract_address: string, function_name: string, args: []string, rpc_url: string) -> AMResponse
+
+
+service CioConsensus("cioConsensus"):
+  getHammingDistance(worker_id: string, task: string) -> u32
+  getXORDistance(cid1: string, cid2: string) -> i32
+  whoami() -> string
+
+
+data DsgAuthorData:
+  name: string
+  repository: string
+  content_mappings: string
+
+data DsgMapped:
+  item: DsgContentItem
+  body: string
+
+data DsgTask:
+  slug: string
+  author: DsgAuthorData
+  payload: string
+  post_type: string
+  publication: DsgPublication
+
+service DsgContent("dsgContent"):
+  includeCid(content: DsgContentItem, cid: string) -> DsgContentItem
+  map(task: DsgTask, mappings: string) -> DsgMapped
+  pebble(task: DsgTask, contentItem: DsgContentItem) -> []DsgRenderObject
+  ripple(task: DsgTask, ripple: DsgRipple, contentItem: DsgContentItem) -> []DsgRenderObject

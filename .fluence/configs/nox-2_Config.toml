@@ -10,7 +10,7 @@ metrics_timer_resolution = "1 minute"
 enable = [ "aqua-ipfs", "decider" ]
 
   [system_services.decider]
-  decider_period_sec = 10
+  decider_period_sec = 60
   worker_ipfs_multiaddr = "/dns4/ipfs/tcp/5001"
   network_api_endpoint = "http://chain-rpc:8545"
   matcher_address = "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c"
@@ -34,6 +34,12 @@ wasm_cid = "bafkreifwz7ia6otb3czodw62hnpvvgnd2wezo4mp27x3vove4ubrtavida"
 
   [effectors.ipfs.allowed_binaries]
   ipfs = "/usr/bin/ipfs"
+
+[effectors.tableland]
+wasm_cid = "bafybeihathubxccjb2zj2i64v5o43tera4sjk46zuaeithg2ula5i7xuq4"
+
+  [effectors.tableland.allowed_binaries]
+  curl = "/usr/bin/curl"
 
 [chain_config]
 http_endpoint = "http://chain-rpc:8545"

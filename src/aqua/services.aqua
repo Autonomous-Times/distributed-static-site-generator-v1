@@ -1,33 +1,60 @@
 aqua ManualServices declares *
 
 import "./types"
--- import "../../.fluence/aqua/services.aqua"
 
-service TuDsgPublicationFromJson("json"):
-  parse(s: string) -> TuDsgPublication
+-- service Stringify("stringify"):
+--   u32ToStr(arg: u32) -> string
+--   dsgContentToStr(c: DsgContentItem) -> string
+--   task(t: DsgTask) -> string
 
-service TuDsgAuthorFromJson("json"):
-  parse(s: string) -> TuDsgAuthorData
+service ConstructLogs("op"):
+  concat_strings(a: string, b: string) -> string
 
-service TuDsgContentToJson("json"):
-  parse(c: TuContentItem) -> string
+service U64Srv("debug"): 
+    stringify(i: u64) -> string
 
-service TuDsgContent("tuDsgContent"):
-  includeCid(content: TuContentItem, cid: string) -> TuContentItem
-  map(task: TuDsgPublishTask, mappings: string) -> TuDsgMapped
-  pebble(task: TuDsgPublishTask, contentItem: TuContentItem) -> []TuDsgRenderObject
-  ripple(task: TuDsgPublishTask, ripple: TuDsgRipple, contentItem: TuContentItem) -> []TuDsgRenderObject
+service U32Srv("debug"): 
+    stringify(i: u32) -> string
 
-service TuContentStore("tuContentStore"):
-  batch_insert(content: TuContentItem, table: TuDsgTable) -> AquaMarineResult
-  insert(content: TuContentItem, table: TuDsgTable, gateway: string) -> AquaMarineResult
-  queryCollection(collection: TuDsgCollection, table: TuDsgTable) -> []TuContentItem
-  queryCollectionCids(collection: TuDsgCollection, table: TuDsgTable) -> AquaMarineResult
-  queryRipple(ripple: TuDsgRipple, table: TuDsgTable, gateway: string) -> []TuContentItem
+service I32Srv("debug"): 
+    stringify(i: i32) -> string
 
-service TuDsgRenderer("tuDsgRenderer"):
-  map(ro: TuDsgRenderObject, body_: string, content: [][]TuContentItem, publication: TuDsgPublication) -> AquaMarineResult
-  single(ro: TuDsgRenderObject, td: []u8) -> AquaMarineResult
+  
+
+service DsgPublicationFromJson("json"):
+  parse(s: string) -> DsgPublication
+
+service DsgAuthorFromJson("json"):
+  parse(s: string) -> DsgAuthorData
+
+service DsgRawContentFromJson("json"):
+  parse(s: string) -> DsgRawContent
+
+service DsgContentToJson("debug"):
+  stringify(c: DsgRawContent) -> string 
+
+service TaskToString("debug"):
+  stringify(c: DsgTask) -> string 
+
+service CidWrapperToString("debug"): 
+  stringify(c: CidWrapper) -> string 
+
+service DsgContent("dsgContent"):
+  includeCid(content: DsgContentItem, cid: string) -> DsgContentItem
+  map(task: DsgTask, mappings: string) -> DsgMapped
+  pebble(task: DsgTask, contentItem: DsgContentItem) -> []DsgRenderObject
+  ripple(task: DsgTask, ripple: DsgRipple, contentItem: DsgContentItem) -> []DsgRenderObject
+
+service ContentStore("contentStore"):
+  batch_insert(content: DsgContentItem, table: DsgTable) -> AMResponse
+  insert(content: DsgContentItem, table: DsgTable, optimistic: bool) -> AMResponse
+  queryCollection(collection: DsgCollection, table: DsgTable) -> AMResponse
+  queryCollectionCids(collection: DsgCollection, table: DsgTable) -> AMResponse
+  queryRipple(ripple: DsgRipple, table: DsgTable) -> AMResponse
+
+service DsgRenderer("dsgRenderer"):
+  map(ro: DsgRenderObject, body_: string, content: [][]DsgContentItem, publication: DsgPublication) -> AquaMarineResult
+  single(ro: DsgRenderObject, td: []u8) -> AquaMarineResult
 
 service CioKubo("cioKubo"):
   add(ipfs_api: string, content: string) -> string
@@ -35,6 +62,9 @@ service CioKubo("cioKubo"):
   get(ipfs_api: string, cid: string) -> string
   getRecursive(ipfs_api: string, cid: string, path_: string) -> string
   hash(ipfs_api: string, path_: string) -> AMResponse
+  -- dag_put(ipfs_api: string, content: string) -> string
+  -- dag_get(ipfs_api: string, cid: string) -> string
+
 
 service CioPinata("cioPinata"):
   addAsFile(content: string, name: string, pinataJWTKey: string) -> AMResponse
@@ -45,7 +75,16 @@ service CioVault("cioVault"):
   inspect(path: string) -> []string
   write(data: string, path: string) -> bool
 
-service TuDsgWebHost("tuDsgWebHost"):
-  update(publication: TuDsgPublication, cid: string) -> AMResponse
+service DsgWebHost("tuDsgWebHost"):
+  update(publication: DsgPublication, cid: string) -> AMResponse
 
+service Npublication("nPublication"):
+  create_filter(contract_address: string, topic: string, latest_block: string, rpc_url: string) -> AMResponse
+  poll_filter(filter: string, rpc_url: string) -> AMEventLogResult
+  read_from_rpc(contract_address: string, function_name: string, args: []string, rpc_url: string) -> AMResponse
+  parse_with_alloy() -> bool
 
+service CioConsensus("cioConsensus"):
+  getHammingDistance(worker_id: string, task: string) -> u32
+  getXORDistance(cid1: string, cid2: string) -> i32
+  whoami() -> string

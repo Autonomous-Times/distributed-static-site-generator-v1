@@ -40,7 +40,7 @@ impl Renderer {
 
     }
 
-    pub fn render_template(self: &mut Self, ro: crate::TuDsgRenderObject, td: &Vec<u8>) -> crate::AquaMarineResult {
+    pub fn render_template(self: &mut Self, ro: crate::DsgRenderObject, td: &Vec<u8>) -> crate::AquaMarineResult {
         
         let mut am_result = crate::AquaMarineResult::new();
 

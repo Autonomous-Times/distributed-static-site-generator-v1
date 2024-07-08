@@ -1,0 +1,271 @@
+aqua Listener
+
+-- Note: spell main function must be exported
+export spell
+
+import Spell from "@fluencelabs/spell/spell_service.aqua"
+import "@fluencelabs/aqua-lib/builtin.aqua"
+import "../../aqua/constants.aqua"
+import "../../aqua/services.aqua"
+import "../../aqua/helpers.aqua"
+import "../../aqua/utils.aqua"
+
+-- import "../../aqua/task.aqua"
+
+func lastAMRResult(rs: *AMResponse) -> string:
+     <- rs[rs.length - 1].result
+
+func createQueue(task: DsgTask, contentItem: DsgContentItem, amrs: *AMResponse) -> *[]DsgRenderObject:
+
+    queue: *[]DsgRenderObject
+
+    main = DsgContent.pebble(task, contentItem)
+    queue <<- main
+    -- for ripple <- main!.template.ripples:   
+    --     amrs <- ContentStore.queryRipple(ripple, task.publication.table) 
+    --     for item <- Parse.contentItems(lastAMRResult(amrs)): 
+    --         queue <- DsgContent.ripple(task, ripple, item)
+
+    <- queue
+
+func createContentItem(task: DsgTask) -> DsgContentItem:
+
+    Spell "listener"
+    queue: *[]DsgRenderObject
+    cw = randomContentWorker()
+    -- Spell.store_log(cw.worker_id!)
+    on cw.worker_id! via cw.host_id:  
+        mapping = CioKubo.get(WEBHOSTKUBO, task.author.content_mappings)
+        mapped = DsgContent.map(task, mapping)
+        content_cid <- CioKubo.add(WEBHOSTKUBO, mapped.body) 
+        contentItem = DsgContent.includeCid(mapped.item, content_cid)
+    --     -- amrs <- ContentStore.insert(contentItem, task.publication.table, false) 
+    <- contentItem
+            
+
+func assembleTask(author: string, publication: string, content: string) -> DsgTask:
+
+    Spell "listener"
+    method = "config"
+    args: *string
+    -- replace with ens lookup
+    author_cid = "bafkreiejzqdpq2pvuxebnwnvp2foffpkscib5cpfnbcnbncqllxohxcalq"
+
+    r = Npublication.read_from_rpc(publication, method, args, RPC_URL)
+    -- Spell.store_log(r.result)
+    s = CioKubo.get(WEBHOSTKUBO, r.result)
+    -- Spell.store_log(s)
+    a = CioKubo.get(WEBHOSTKUBO, author_cid)
+    c = CioKubo.get(WEBHOSTKUBO, content)
+    raw = DsgRawContentFromJson.parse(c)
+
+    <- DsgTask(
+        slug = raw.slug, 
+        author = DsgAuthorFromJson.parse(a), 
+        payload = c, 
+        post_type = raw.post_type, 
+        publication = DsgPublicationFromJson.parse(s)
+    )
+
+func newFilter(): 
+
+    Spell "listener"
+    topic = "0xf329210f734fac59eadfb0605804ea99023421b57265cb133bac797ab65e4598"
+    latest_block <- Spell.get_string("latest_block") 
+
+    filter <- Npublication.create_filter(
+        NPRINTER, 
+        topic, 
+        latest_block.value,
+        RPC_URL
+        )
+
+    if filter.success: 
+        Spell.store_log(ConstructLogs.concat_strings("new filter: ", filter.result))
+        Spell.set_string("filter", filter.result)
+    else: 
+        Spell.store_log(filter.result)
+
+
+func poll() -> *EventLog: 
+
+    eventLogs: *EventLog
+    Spell "listener"
+
+    filter <- Spell.get_string("filter") 
+
+    r <- Npublication.poll_filter(
+        filter.value,
+        RPC_URL
+        )
+
+    if r.success == false:
+        Spell.store_log(r.error)
+        -- mogelijk is filter verlopen. 
+        newFilter()
+    else:
+        for log <- r.results:       
+            eventLogs <<- log
+        -- Spell.store_log("polled")
+
+    <- eventLogs
+
+func initFilter():
+
+    Spell "listener"
+    block <- Spell.get_string("latest_block")
+    if block.absent:
+        Spell.set_string("latest_block", "0x37881d5")
+
+    filter <- Spell.get_string("filter")
+    if filter.absent:
+        newFilter()
+
+func compareBlocks() -> bool: 
+
+    Spell "listener"
+    blocks: *string
+    ws = getTaskWorkers()
+    synced: *bool
+    for w <- ws: 
+        on w.worker_id! via w.host_id:
+            Spell "listener"
+            lb = Spell.get_string("latest_block")
+            blocks <<- lb.value
+    -- for b <- blocks:
+    --     Spell.store_log(b)
+    if blocks! == blocks[1] && blocks! == blocks[2]: 
+        Spell.store_log(ConstructLogs.concat_strings("synced on block: ", blocks!))
+        synced <<- true
+    else:
+        Spell.store_log("syncing")
+        synced <<- false
+    <- synced!
+       
+func waitForBlockSync() -> bool:
+
+    Spell "listener"
+    synced: *bool
+    synced <<- false
+    array = [1,2,3,4,5,6,7,8,9]
+    for i <- array:
+        if synced[synced.length - 1] != true:
+            s = compareBlocks()
+            if s:
+                synced <<- true
+            else:
+                Peer.timeout(1000,"some spacetime")
+    <- synced[synced.length - 1]
+
+func getConsensusOnTask() -> string: 
+
+    Spell "listener"
+    task_cids: *string
+    ws = getTaskWorkers()
+    for w <- ws: 
+        on w.worker_id! via w.host_id:
+            Spell "listener"
+            task = Spell.get_string("currentTask")
+            if task.value != "":
+                task_cids <<- task.value
+    Spell.store_log("done fetching tasks")
+    -- for c <- task_cids: 
+    --     Spell.store_log(c)
+
+    counts = countUniques(task_cids)
+    -- for c <- counts: 
+        -- Spell.store_log(U32Srv.stringify(c))
+    h = highest(counts)
+    i = indexOf(counts,h)
+    -- Spell.store_log(I32Srv.stringify(i))
+    uniques = dedup(task_cids)
+    -- for u <- uniques: 
+        -- Spell.store_log(u)
+    
+    <- uniques[i]
+
+func wrapHostCid(host: string, task_cid:string) -> CidWrapper:
+
+    <- CidWrapper(host = host, task_cid = task_cid)
+
+func select(task_cid: string) -> bool: 
+
+    Spell "listener"
+    itsme: *bool 
+    itsme <<- true
+    me <- CioConsensus.whoami()
+    Spell.store_log(ConstructLogs.concat_strings("my host_id: ", me))
+    distances: *i32
+    for w <- getOtherTaskWorkers(me): 
+        on w.worker_id! via w.host_id:
+            -- try:
+                -- using only host_id skews distribution within worker with fixed host_ids 
+                -- adding another agreed upon el to the mix! blocktime or taskcid
+            host_cid = CioKubo.add(WEBHOSTKUBO, 
+                CidWrapperToString.stringify(
+                    wrapHostCid(w.host_id, task_cid)
+                )
+            )
+            distances <- CioConsensus.getXORDistance(host_cid, task_cid)
+            -- otherwise: 
+            --     distances <<- 101
+    for d <- distances:
+        Spell.store_log(ConstructLogs.concat_strings("xor between other worker & task cid: ", I32Srv.stringify(d)))
+
+    cid = CioKubo.add(WEBHOSTKUBO, 
+        CidWrapperToString.stringify(
+            wrapHostCid(me, task_cid)
+        )
+    )
+    my_distance = CioConsensus.getXORDistance(cid, task_cid) 
+    Spell.store_log(ConstructLogs.concat_strings("xor between me & task cids: ", I32Srv.stringify(my_distance)))
+
+    for d <- distances:
+        if d > my_distance:     
+            itsme <<- false
+    <- itsme[itsme.length - 1]
+
+func spell():
+
+    Spell "listener"
+    -- queue: *[]DsgRenderObject
+    amrs: *AMResponse
+
+    initFilter()
+    eventLogs <- poll()
+    for log <- eventLogs:
+        Spell.store_log(ConstructLogs.concat_strings("event received from tx: ", log.transaction_hash))
+        Spell.set_string("latest_block", log.block_number)
+        tasks: *DsgTask
+        try:
+            tasks <- assembleTask(log.params!,log.params[1],log.params[2])   
+        otherwise:
+            Spell.store_log("failed to assemble task")
+        if tasks.length > 0:
+            task = tasks!
+            task_string = TaskToString.stringify(task)  
+            task_cid = CioKubo.add(SUBNETKUBO, task_string)
+            Spell.store_log(ConstructLogs.concat_strings("assembled task: ", task_cid))
+            Spell.set_string("currentTask", task_cid)
+
+            synced = waitForBlockSync()   
+            if synced:        
+                Spell.store_log("continue ... ")
+                c = getConsensusOnTask()
+                Spell.store_log(ConstructLogs.concat_strings("consensus on task cid: ", c))
+                if c == task_cid: 
+                    Spell.store_log("i have agreed upon task")
+                    itsme = select(task_cid)
+                    if itsme:
+                        Spell.store_log("i was selected")
+                        contentItem = createContentItem(task)
+                        Spell.store_log("continue ... ")
+                        -- queue = createQueue(task, contentItem, amrs)
+                        -- Spell.store_log("3")
+                        -- for ros <- queue:       
+                        --     for ro <- ros: 
+                        --         Spell.store_log(ro.name)
+                        -- for amr <- amrs:
+                        --     Spell.store_log(amr.result)
+                    else: 
+                        Spell.store_log("doing nothing this time")

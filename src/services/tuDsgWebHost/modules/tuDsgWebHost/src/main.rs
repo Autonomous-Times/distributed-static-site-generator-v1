@@ -3,7 +3,7 @@ use marine_rs_sdk::marine;
 use marine_rs_sdk::module_manifest;
 use cio_curl_effector_imports as curl;
 use cio_curl_effector_imports::{CurlRequest,HttpHeader};
-use tu_dsg_types::{ TuDsgPublication }; 
+use tu_dsg_types::{ DsgPublication }; 
 use cio_response_types::{AMResponse};   
 use std::fs;
 use std::path::PathBuf;
@@ -22,7 +22,7 @@ struct WebHostTask {
 pub fn main() {}
 
 #[marine]
-pub fn update(publication: TuDsgPublication, cid: String) -> AMResponse {
+pub fn update(publication: DsgPublication, cid: String) -> AMResponse {
 
     let url = String::from("https://webhost1.autonomous-times.com/publish");
 

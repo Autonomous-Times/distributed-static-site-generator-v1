@@ -8,72 +8,42 @@ import "./helpers.aqua"
 import "./types.aqua"
 
 
-func fetchPublication(cid: string, kubo: string) -> TuDsgPublication:
-
-    s: *string 
-    w = randomContentWorker()
-    on w.worker_id! via w.host_id:
-      s <- CioKubo.get(kubo, cid)
-      -- ipfs_results <- Ipfs.get(cid)
-      -- s <- Vault.cat(ipfs_results.path)
-        
-    <- TuDsgPublicationFromJson.parse(s!)
-
-func fetchAuthor(cid: string, kubo: string) -> TuDsgAuthorData:
-
-    s: *string  
-    -- ipfs_results: *IpfsGetResult
-
-    w = randomContentWorker()
-    on w.worker_id! via w.host_id:
-      -- ipfs_result <- Ipfs.get(cid)
-      -- s <- Vault.cat(ipfs_result.path)
-      s <- CioKubo.get(kubo, cid)
-       
-    <- TuDsgAuthorFromJson.parse(s!)
-
--- func fetchPublicationFromSubnet(cid: string) -> TuDsgPublication:
+-- func fetchPublication(cid: string, kubo: string) -> DsgPublication:
 
 --     s: *string 
---     ipfs_results: *IpfsGetResult
+--     w = randomContentWorker()
+--     on w.worker_id! via w.host_id:
+--       s <- CioKubo.get(kubo, cid)
+--     <- Parse.publication(s!)
 
---     for w <- getContentWorkers():
---         on w.worker_id! via w.host_id:
---             ipfs_results <- Ipfs.dag_get(cid)
---             s <- Vault.cat(ipfs_results!.path)
-        
---     <- TuDsgPublicationFromJson.parse(s!)
-
--- func fetchAuthorFromSubnet(cid: string) -> TuDsgAuthorData:
+-- func fetchAuthor(cid: string, kubo: string) -> DsgAuthorData:
 
 --     s: *string  
---     ipfs_results: *IpfsGetResult
+--     w = randomContentWorker()
+--     on w.worker_id! via w.host_id:
+--       s <- CioKubo.get(kubo, cid)
+       
+--     <- Parse.author(s!)
 
---     for w <- getContentWorkers():
---         on w.worker_id! via w.host_id:
---             ipfs_results <- Ipfs.dag_get(cid)
---             s <- Vault.cat(ipfs_results!.path)
+-- func fromTempTask(tempTask: DsgPublishTaskTemp, kubo: string) -> DsgPublishTask:
+
+--     Console.print(tempTask.author)
+--     authorData = fetchAuthor(tempTask.author, kubo)
+--     Console.print("fetched author")
+--     publicationData = fetchPublication(tempTask.publication, kubo)
     
---     <- TuDsgAuthorFromJson.parse(s!)
+--     <- TuDsgPublishTask(
+--         slug = tempTask.slug, 
+--         author = authorData, 
+--         payload = tempTask.payload, 
+--         post_type = tempTask.post_type, 
+--         publication = publicationData
+--     )
 
+func findRipples(ts: []DsgTemplate, key: string) -> []DsgRipple:
 
-func fromTempTask(tempTask: TuDsgPublishTaskTemp, kubo: string) -> TuDsgPublishTask:
-
-    authorData = fetchAuthor(tempTask.author, kubo)
-    publicationData = fetchPublication(tempTask.publication, kubo)
-    
-    <- TuDsgPublishTask(
-        slug = tempTask.slug, 
-        author = authorData, 
-        payload = tempTask.payload, 
-        post_type = tempTask.post_type, 
-        publication = publicationData
-    )
-
-func findRipples(ts: []TuDsgTemplate, key: string) -> []TuDsgRipple:
-
-    ripples: *TuDsgRipple
-    template: *TuDsgTemplate
+    ripples: *DsgRipple
+    template: *DsgTemplate
     for t <- ts:
       if t.reference == key:
         template <<- t
@@ -82,3 +52,4 @@ func findRipples(ts: []TuDsgTemplate, key: string) -> []TuDsgRipple:
           ripples <<- r
 
     <- ripples
+

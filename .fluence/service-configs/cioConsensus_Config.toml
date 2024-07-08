@@ -1,0 +1,12 @@
+total_memory_limit = "2GB"
+
+[[module]]
+name = "cioConsensus"
+load_from = "/home/joera/Documents/dsg/fluence/target/wasm32-wasi/release/cioConsensus.wasm"
+
+[module.wasi.mapped_dirs]
+"/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioConsensus/service/tmp"
+"/storage" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioConsensus/service/storage"
+"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioConsensus/modules/cioConsensus/tmp/module"
+"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioConsensus/modules/cioConsensus/storage/module"
+"/tmp/vault" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/particles"

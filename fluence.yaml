@@ -9,24 +9,23 @@ version: 8
 marineVersion: 0.19.7
 
 deployments:
+  taskWorkerV1:
+    targetWorkers: 3
+    pricePerWorkerEpoch: "0.0001"
+    initialBalance: "1"
+    services: [ nPublication, cioKubo, cioConsensus ]
+    spells: [ listener ]
   contentWorkerV1:
     targetWorkers: 3
     pricePerWorkerEpoch: "0.0001"
     initialBalance: "1"
-    services: [ cioKubo, tuDsgContent, cioPinata, tuContentStore ] # , , , ,
+    services: [ tuContentStore, cioKubo, dsgContent ]
     spells: []
   renderWorkerV0:
     targetWorkers: 3
     pricePerWorkerEpoch: "0.0001"
     initialBalance: "1"
-    services:
-      [
-        # tuContentStore,
-        tuDsgRenderer,
-        cioKubo,
-        cioPinata,
-        cioVault
-      ]
+    services: [ tuContentStore, tuDsgRenderer, cioKubo ]
     spells: []
   webHostWorkerV0:
     targetWorkers: 3
@@ -47,8 +46,10 @@ compileAqua:
     target: ts
 
 services:
-  tuDsgContent:
-    get: src/services/tuDsgContent
+  cioVault:
+    get: src/services/cioVault
+  dsgContent:
+    get: src/services/dsgContent
   tuContentStore:
     get: src/services/tuContentStore
   tuDsgRenderer:
@@ -60,6 +61,17 @@ services:
   cioKubo:
     get: src/services/cioKubo
   cioPinata:
-    get: src/services/cioPinata
-  cioVault:
-    get: src/services/cioVault
+    get: src/services/cio-pinata
+  nPublication:
+    get: src/services/nPublication
+  cioConsensus:
+    get: src/services/cioConsensus
+
+spells:
+  listener:
+    get: src/spells/listener
+
+customFluenceEnv:
+  contractsEnv: kras
+  relays:
+    - /ip4/143.176.14.172/tcp/9991/ws/p2p/12D3KooWP5UnQLWX11pFSMgD78Q9rwq6o2p6hzXTqU74s6z6jBCx

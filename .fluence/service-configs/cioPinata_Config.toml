@@ -1,8 +1,8 @@
 total_memory_limit = "2GB"
 
 [[module]]
-name = "cio_curl_effector"
-load_from = "/home/joera/Documents/dsg/fluence/src/services/cioPinata/modules/cio-curl-effector/cio_curl_effector.wasm"
+name = "curl_effector"
+load_from = "/home/joera/Documents/dsg/fluence/src/services/cio-pinata/modules/cio-curl-effector/curl_effector.wasm"
 
   [module.mounted_binaries]
   ipfs = "/usr/bin/curl"
@@ -10,8 +10,8 @@ load_from = "/home/joera/Documents/dsg/fluence/src/services/cioPinata/modules/ci
 [module.wasi.mapped_dirs]
 "/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioPinata/service/tmp"
 "/storage" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioPinata/service/storage"
-"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioPinata/modules/cio_curl_effector/tmp/module"
-"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioPinata/modules/cio_curl_effector/storage/module"
+"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioPinata/modules/curl_effector/tmp/module"
+"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioPinata/modules/curl_effector/storage/module"
 "/tmp/vault" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/particles"
 
 [[module]]

@@ -1,8 +1,8 @@
 total_memory_limit = "2GB"
 
 [[module]]
-name = "cio_curl_effector"
-load_from = "/home/joera/Documents/dsg/fluence/src/services/tuContentStore/modules/cio-curl-effector/cio_curl_effector.wasm"
+name = "cio_tableland_effector"
+load_from = "/home/joera/Documents/dsg/fluence/src/services/tuContentStore/modules/cio-tableland-effector/cio_tableland_effector.wasm"
 
   [module.mounted_binaries]
   ipfs = "/usr/bin/curl"
@@ -10,8 +10,8 @@ load_from = "/home/joera/Documents/dsg/fluence/src/services/tuContentStore/modul
 [module.wasi.mapped_dirs]
 "/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuContentStore/service/tmp"
 "/storage" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuContentStore/service/storage"
-"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuContentStore/modules/cio_curl_effector/tmp/module"
-"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuContentStore/modules/cio_curl_effector/storage/module"
+"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuContentStore/modules/cio_tableland_effector/tmp/module"
+"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuContentStore/modules/cio_tableland_effector/storage/module"
 "/tmp/vault" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/particles"
 
 [[module]]

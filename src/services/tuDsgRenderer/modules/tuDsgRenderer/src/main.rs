@@ -4,7 +4,7 @@ use marine_rs_sdk::module_manifest;
 use marine_rs_sdk::WasmLoggerBuilder;
 use marine_rs_sdk::MountedBinaryResult;
 use log;
-use tu_dsg_types::{TuDsgRenderObject, TuDsgDns, TuDsgDomain, TuDsgPublication, TuContentItem, TemplateData };
+use tu_dsg_types::{DsgRenderObject, DsgDns, DsgDomain, DsgPublication, DsgContentItem, TemplateData };
 use cio_response_types::{AquaMarineResult};  
 use serde_json::{Map, Value};
 use std::collections::BTreeMap; 
@@ -31,7 +31,7 @@ pub fn main() {
 }
 
 #[marine]
-pub fn map(ro: TuDsgRenderObject, body_: String, content: Vec<Vec<TuContentItem>>, publication: TuDsgPublication) -> AquaMarineResult {
+pub fn map(ro: DsgRenderObject, body_: String, content: Vec<Vec<DsgContentItem>>, publication: DsgPublication) -> AquaMarineResult {
 
     let mut am_result = AquaMarineResult::new();
 
@@ -71,7 +71,7 @@ pub fn map(ro: TuDsgRenderObject, body_: String, content: Vec<Vec<TuContentItem>
 }
 
 #[marine]
-pub fn single(ro: TuDsgRenderObject, td: Vec<u8>) -> AquaMarineResult {
+pub fn single(ro: DsgRenderObject, td: Vec<u8>) -> AquaMarineResult {
 
     let mut am_result = AquaMarineResult::new();
     let mut renderer = renderer::Renderer::new(vault());

@@ -6,8 +6,8 @@
 
 version: 0
 
-name: tuDsgContent
+name: dsgContent
 
 modules:
   facade:
-    get: modules/tuDsgContent
+    get: modules/dsgContent

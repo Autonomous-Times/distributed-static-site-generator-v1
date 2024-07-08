@@ -5,7 +5,7 @@ use marine_rs_sdk::marine;
 use marine_rs_sdk::module_manifest;
 use marine_rs_sdk::MountedBinaryResult;
 use tu_types::results::{ AquaMarineResult};
-use tu_dsg_types::{TuDsgRenderObject};
+use tu_dsg_types::{DsgRenderObject};
 
 use serde_json::Value;
 use std::collections::BTreeMap;
@@ -34,7 +34,7 @@ pub fn fetch_from_api(url: &str) -> AquaMarineResult {
     am_result
 }
 
-pub fn gather(ro: &TuDsgRenderObject, data: &BTreeMap<String, Value>, subnet_kubo: &String) -> BTreeMap<String,Vec<BTreeMap<String, Value>>> {
+pub fn gather(ro: &DsgRenderObject, data: &BTreeMap<String, Value>, subnet_kubo: &String) -> BTreeMap<String,Vec<BTreeMap<String, Value>>> {
 
     let mut collections: BTreeMap<String,Vec<BTreeMap<String, Value>>> = BTreeMap::new();
 

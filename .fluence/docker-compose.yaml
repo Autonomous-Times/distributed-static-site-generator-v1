@@ -53,7 +53,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
   chain-rpc:
-    image: fluencelabs/chain-rpc:0.13.6
+    image: fluencelabs/chain-rpc:0.13.9
     ports:
       - 8545:8545
     volumes:
@@ -69,7 +69,7 @@ services:
       timeout: 10s
       retries: 20
   chain-deploy-script:
-    image: fluencelabs/chain-deploy-script:0.13.6
+    image: fluencelabs/chain-deploy-script:0.13.9
     environment:
       CHAIN_RPC_URL: http://chain-rpc:8545
       MAX_FAILED_RATIO: "9999"
@@ -104,9 +104,9 @@ services:
       ETHEREUM_REORG_THRESHOLD: 1
       ETHEREUM_ANCESTOR_COUNT: 1
   subgraph-deploy-script:
-    image: fluencelabs/subgraph-deploy-script:0.13.6
+    image: fluencelabs/subgraph-deploy-script:0.13.9
     environment:
-      GRAPHNODE_URL: http://graph-node:8020
+      GRAPHNODE_ADMIN_URL_LOCAL: http://graph-node:8020
       IPFS_URL: http://ipfs:5001
     depends_on:
       - graph-node
@@ -117,9 +117,9 @@ services:
       - 9991:9991
     environment:
       WASM_LOG: debug
-      FLUENCE_MAX_SPELL_PARTICLE_TTL: 9s
+      FLUENCE_MAX_SPELL_PARTICLE_TTL: 60s
       FLUENCE_ROOT_KEY_PAIR__PATH: /run/secrets/nox-0
-      RUST_LOG: chain_connector=debug,run-console=trace,aquamarine::log=debug,network=trace,worker_inactive=trace
+      RUST_LOG: info,chain_connector=debug,run-console=trace,aquamarine::log=debug,network=trace,worker_inactive=trace,expired=info,spell=debug,ipfs_effector=debug,ipfs_pure=debug,spell_event_bus=trace,system_services=debug,particle_reap=debug,aquamarine::actor=debug,aquamarine::aqua_runtime=off,aquamarine=warn,chain_listener=debug,chain-connector=debug,execution=trace
     command:
       - --config=/run/configs/nox-0_Config.toml
       - --dev-mode
@@ -128,6 +128,7 @@ services:
       - /dns4/nox-0/tcp/9991/ws
       - --allow-private-ips
       - --local
+      - --print-config
     depends_on:
       ipfs:
         condition: service_healthy
@@ -152,9 +153,9 @@ services:
       - 9992:9992
     environment:
       WASM_LOG: debug
-      FLUENCE_MAX_SPELL_PARTICLE_TTL: 9s
+      FLUENCE_MAX_SPELL_PARTICLE_TTL: 60s
       FLUENCE_ROOT_KEY_PAIR__PATH: /run/secrets/nox-1
-      RUST_LOG: chain_connector=debug,run-console=trace,aquamarine::log=debug,network=trace,worker_inactive=trace
+      RUST_LOG: info,chain_connector=debug,run-console=trace,aquamarine::log=debug,network=trace,worker_inactive=trace,expired=info,spell=debug,ipfs_effector=debug,ipfs_pure=debug,spell_event_bus=trace,system_services=debug,particle_reap=debug,aquamarine::actor=debug,aquamarine::aqua_runtime=off,aquamarine=warn,chain_listener=debug,chain-connector=debug,execution=trace
     command:
       - --config=/run/configs/nox-1_Config.toml
       - --dev-mode
@@ -163,6 +164,7 @@ services:
       - /dns4/nox-1/tcp/9992/ws
       - --allow-private-ips
       - --bootstraps=/dns/nox-0/tcp/7771
+      - --print-config
     depends_on:
       ipfs:
         condition: service_healthy
@@ -187,9 +189,9 @@ services:
       - 9993:9993
     environment:
       WASM_LOG: debug
-      FLUENCE_MAX_SPELL_PARTICLE_TTL: 9s
+      FLUENCE_MAX_SPELL_PARTICLE_TTL: 60s
       FLUENCE_ROOT_KEY_PAIR__PATH: /run/secrets/nox-2
-      RUST_LOG: chain_connector=debug,run-console=trace,aquamarine::log=debug,network=trace,worker_inactive=trace
+      RUST_LOG: info,chain_connector=debug,run-console=trace,aquamarine::log=debug,network=trace,worker_inactive=trace,expired=info,spell=debug,ipfs_effector=debug,ipfs_pure=debug,spell_event_bus=trace,system_services=debug,particle_reap=debug,aquamarine::actor=debug,aquamarine::aqua_runtime=off,aquamarine=warn,chain_listener=debug,chain-connector=debug,execution=trace
     command:
       - --config=/run/configs/nox-2_Config.toml
       - --dev-mode
@@ -198,6 +200,7 @@ services:
       - /dns4/nox-2/tcp/9993/ws
       - --allow-private-ips
       - --bootstraps=/dns/nox-0/tcp/7771
+      - --print-config
     depends_on:
       ipfs:
         condition: service_healthy

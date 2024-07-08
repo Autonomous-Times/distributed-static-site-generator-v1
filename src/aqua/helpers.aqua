@@ -7,6 +7,28 @@ use "../../.fluence/aqua/deals.aqua"
 import "./services.aqua"
 import "./types.aqua"
 
+func getTaskWorkers() -> []Worker:
+
+    deals <- Deals.get()
+    dealId = deals.taskWorkerV1!.dealIdOriginal
+    on HOST_PEER_ID:
+        subnet <- Subnet.resolve(dealId)
+        if subnet.success == false:
+            Console.print(["Failed to resolve subnet: ", subnet.error])
+    <- subnet.workers
+
+func getOtherTaskWorkers(me: string) -> []Worker:
+
+    other: *Worker
+    ws = getTaskWorkers()
+    for w <- ws:
+        if w.host_id != me: 
+            other <<- w
+    <- other
+
+func randomTaskWorker() -> Worker:
+    <- getTaskWorkers()!
+
 func getContentWorkers() -> []Worker:
 
     deals <- Deals.get()
@@ -79,3 +101,5 @@ func selectLeader(responses: *AMResponse) -> Worker:
             workers <<- w
 
     <- workers!
+
+

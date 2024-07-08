@@ -1,0 +1,51 @@
+aqua Task declares * 
+
+import "../../.fluence/aqua-dependencies/node_modules/@fluencelabs/aqua-lib/builtin.aqua"
+import "../../.fluence/aqua-dependencies/node_modules/@fluencelabs/aqua-lib/subnet.aqua"
+import "../../.fluence/aqua-dependencies/node_modules/@fluencelabs/aqua-ipfs/ipfs.aqua"
+
+import Spell from "@fluencelabs/spell/spell_service.aqua"
+
+import "./constants.aqua"
+import "./services.aqua"
+import "./helpers.aqua"
+import "./types.aqua"
+import "./dsg_helpers.aqua"
+
+func assembleTask(publication: string, author: string, content: string) -> string: -- DsgTask:
+
+    Spell "listener"
+
+    r: *AMResponse
+    s: *string 
+    p: *DsgPublication
+    a: *string
+    c: *string
+    -- authorData: TuDsgAuthorData
+    method = "config"
+    args: *string
+
+    w = randomTaskWorker()
+    on w.worker_id! via w.host_id:
+        Spell.store_log("hallo")
+        r <- Npublication.read_from_rpc(publication, method, args, RPC_URL)
+    --     s <- CioKubo.get(WEBHOSTKUBO, r!.result)
+    --     publicationData <- DsgPublicationFromJson.parse(s!)
+    --     Spell.store_log(publicationData.name)
+    --     a <- CioKubo.get(WEBHOSTKUBO, "bafkreiejzqdpq2pvuxebnwnvp2foffpkscib5cpfnbcnbncqllxohxcalq")
+    --     authorData <- DsgAuthorFromJson.parse(a!)
+    --     Spell.store_log(authorData.name)
+    --     c <- CioKubo.get(WEBHOSTKUBO, content)
+    --     Spell.store_log(c!)
+    --     contentItem <- DsgContentItemFromJson.parse(c!)
+    --     Spell.store_log(contentItem.slug)
+
+    -- <- DsgTask(
+    --     slug = contentItem.slug, 
+    --     author = authorData, 
+    --     payload = c!, 
+    --     post_type = contentItem.post_type, 
+    --     publication = publicationData
+    -- )
+
+    <- r!.result_raw
