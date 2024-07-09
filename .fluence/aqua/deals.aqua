@@ -1,73 +1,23 @@
 aqua Deals declares *
 
-data ContentWorkerV1:
+data Deal:
+    chainNetwork: string
     chainNetworkId: u64
     dealId: string
     dealIdOriginal: string
     definition: string
-    matched: bool
-    timestamp: string
-
-data RenderWorkerV0:
-    chainNetworkId: u64
-    dealId: string
-    dealIdOriginal: string
-    definition: string
-    matched: bool
-    timestamp: string
-
-data TaskWorkerV1:
-    chainNetworkId: u64
-    dealId: string
-    dealIdOriginal: string
-    definition: string
-    timestamp: string
-
-data WebHostWorkerV0:
-    chainNetworkId: u64
-    dealId: string
-    dealIdOriginal: string
-    definition: string
-    matched: bool
     timestamp: string
 
 data Deals:
-    contentWorkerV1: ?ContentWorkerV1
-    renderWorkerV0: ?RenderWorkerV0
-    taskWorkerV1: ?TaskWorkerV1
-    webHostWorkerV0: ?WebHostWorkerV0
+    contentWorkerV1: ?Deal
+    renderWorkerV0: ?Deal
+    taskWorkerV1: ?Deal
+    webHostWorkerV0: ?Deal
 
 func get() -> Deals:
     <- Deals(
-        taskWorkerV1=?[TaskWorkerV1(
-            timestamp="2024-07-08T08:35:36.272Z",
-            definition="bafkreieqwujh5oq3neoyxqdczvdpvjpqzirdrk7opci5uvnafug6zshw3a",
-            chainNetworkId=31337,
-            dealIdOriginal="0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
-            dealId="ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b"
-        )],
-        contentWorkerV1=?[ContentWorkerV1(
-            definition="bafkreidumthrokix7p54v4sky2nu3exldourrhuyx7afviu6ksemkz5kd4",
-            timestamp="2024-07-08T08:01:35.360Z",
-            dealIdOriginal="0x18998c7E38ede4dF09cEec08E5372Bf8fe5719ea",
-            dealId="18998c7e38ede4df09ceec08e5372bf8fe5719ea",
-            chainNetworkId=31337,
-            matched=true
-        )],
-        renderWorkerV0=?[RenderWorkerV0(
-            definition="bafkreif5hj4ti5gbufdaaq7n755zakcz7fnlxglvqnt7hw5vjb3rzobniy",
-            timestamp="2024-07-08T08:01:48.083Z",
-            dealIdOriginal="0x2901bb75a1f4B0ac205CB2e68986A53E3480eB56",
-            dealId="2901bb75a1f4b0ac205cb2e68986a53e3480eb56",
-            chainNetworkId=31337,
-            matched=true
-        )],
-        webHostWorkerV0=?[WebHostWorkerV0(
-            definition="bafkreigbuae2baybflswkbydu3uu3tncb2jrwz7cco4r2ebbfzokmh5cp4",
-            timestamp="2024-07-08T08:02:00.807Z",
-            dealIdOriginal="0x541Dfe503202b78c5d78FaCd6CDB0a04D4b35634",
-            dealId="541dfe503202b78c5d78facd6cdb0a04d4b35634",
-            chainNetworkId=31337,
-            matched=true
-        )]
+        taskWorkerV1=nil,
+        contentWorkerV1=nil,
+        renderWorkerV0=nil,
+        webHostWorkerV0=nil
     )
