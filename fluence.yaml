@@ -47,7 +47,7 @@ compileAqua:
 
 services:
   cioVault:
-    get: src/services/cioVault
+    get: src/services/cio-vault
   dsgContent:
     get: src/services/dsgContent
   tuContentStore:
@@ -59,7 +59,7 @@ services:
   tuDsgWebHost:
     get: src/services/tuDsgWebHost
   cioKubo:
-    get: src/services/cioKubo
+    get: src/services/cio-kubo
   cioPinata:
     get: src/services/cio-pinata
   nPublication:
