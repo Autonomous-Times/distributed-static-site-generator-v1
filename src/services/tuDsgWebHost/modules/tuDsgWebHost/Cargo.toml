@@ -10,6 +10,7 @@ path = "src/main.rs"
 [dependencies]
 marine-rs-sdk = "0.14.0"
 cio-curl-effector-imports = { git = "https://github.com/composibleIO/cio-curl-effector.git", branch = "main" }
+curl-effector-imports = { git = "https://github.com/fluencelabs/curl-effector.git", branch = "main" }
 cio-response-types = { git = "https://github.com/composibleIO/cio-response-types", branch = "main" }
 tu_dsg_types = { path = "../../../../tuDsgTypes" }
 serde = "1.0.198"
