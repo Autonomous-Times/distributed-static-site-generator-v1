@@ -171,7 +171,6 @@ func getConsensusOnTask() -> string:
     Spell.store_log("done fetching tasks")
     -- for c <- task_cids: 
     --     Spell.store_log(c)
-
     counts = countUniques(task_cids)
     -- for c <- counts: 
         -- Spell.store_log(U32Srv.stringify(c))
@@ -181,11 +180,9 @@ func getConsensusOnTask() -> string:
     uniques = dedup(task_cids)
     -- for u <- uniques: 
         -- Spell.store_log(u)
-    
     <- uniques[i]
 
 func wrapHostCid(host: string, task_cid:string) -> CidWrapper:
-
     <- CidWrapper(host = host, task_cid = task_cid)
 
 func select(task_cid: string) -> bool: 
@@ -198,17 +195,17 @@ func select(task_cid: string) -> bool:
     distances: *i32
     for w <- getOtherTaskWorkers(me): 
         on w.worker_id! via w.host_id:
-            -- try:
-                -- using only host_id skews distribution within worker with fixed host_ids 
-                -- adding another agreed upon el to the mix! blocktime or taskcid
-            host_cid = CioKubo.add(WEBHOSTKUBO, 
-                CidWrapperToString.stringify(
-                    wrapHostCid(w.host_id, task_cid)
+            try:
+                    -- using only host_id skews distribution within worker with fixed host_ids 
+                    -- adding another agreed upon el to the mix! blocktime or taskcid
+                host_cid = CioKubo.add(WEBHOSTKUBO, 
+                    CidWrapperToString.stringify(
+                        wrapHostCid(w.host_id, task_cid)
+                    )
                 )
-            )
-            distances <- CioConsensus.getXORDistance(host_cid, task_cid)
-            -- otherwise: 
-            --     distances <<- 101
+                distances <- CioConsensus.getXORDistance(host_cid, task_cid)
+            otherwise: 
+                distances <<- 101
     for d <- distances:
         Spell.store_log(ConstructLogs.concat_strings("xor between other worker & task cid: ", I32Srv.stringify(d)))
 
