@@ -6,4 +6,45 @@
 
 version: 1
 
-deals: {}
+deals:
+  {
+    local:
+      {
+        taskWorkerV1:
+          {
+            definition: bafkreihssu34lqhdok3wmsrxq3rwumeiyt4tapyrew4tmxzjnhxyh3mcpm,
+            timestamp: 2024-07-09T16:46:50.797Z,
+            dealIdOriginal: "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
+            dealId: ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b,
+            chainNetworkId: 31337,
+            matched: true
+          },
+        contentWorkerV1:
+          {
+            definition: bafkreifzbdepgey3b6wvh7wkezkds4pz7ejcsrtpwsqd65tnldfynae4ym,
+            timestamp: 2024-07-09T16:47:08.865Z,
+            dealIdOriginal: "0x18998c7E38ede4dF09cEec08E5372Bf8fe5719ea",
+            dealId: 18998c7e38ede4df09ceec08e5372bf8fe5719ea,
+            chainNetworkId: 31337,
+            matched: true
+          },
+        renderWorkerV0:
+          {
+            definition: bafkreidlfjsthrzmhncej3g3f5ol3zkmewayzrcm2fqcxontgkswutqesi,
+            timestamp: 2024-07-09T16:47:21.651Z,
+            dealIdOriginal: "0x2901bb75a1f4B0ac205CB2e68986A53E3480eB56",
+            dealId: 2901bb75a1f4b0ac205cb2e68986a53e3480eb56,
+            chainNetworkId: 31337,
+            matched: true
+          },
+        webHostWorkerV0:
+          {
+            definition: bafkreicxactzea2wqqiz2qt5gj4pavo626kmpmqg6bz7432kkmjd7ug53q,
+            timestamp: 2024-07-09T16:47:34.398Z,
+            dealIdOriginal: "0x541Dfe503202b78c5d78FaCd6CDB0a04D4b35634",
+            dealId: 541dfe503202b78c5d78facd6cdb0a04d4b35634,
+            chainNetworkId: 31337,
+            matched: true
+          }
+      }
+  }

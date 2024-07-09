@@ -2,7 +2,7 @@ total_memory_limit = "2GB"
 
 [[module]]
 name = "curl_effector"
-load_from = "/home/joera/Documents/dsg/fluence/src/services/tuDsgWebHost/modules/cio-curl-effector/curl_effector.wasm"
+load_from = "/home/joera/Documents/dsg/fluence/src/services/tuDsgWebHost/modules/curl-effector/curl_effector.wasm"
 
   [module.mounted_binaries]
   ipfs = "/usr/bin/curl"

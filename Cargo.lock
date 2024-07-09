@@ -496,7 +496,7 @@ name = "cio-ipfs-effector-imports"
 version = "0.1.1"
 source = "git+https://github.com/composibleIO/cio-ipfs-effector?branch=main#6443d3f083dcb62bcd18739e51141628430c2ca9"
 dependencies = [
- "ipfs-effector-types",
+ "ipfs-effector-types 0.1.1 (git+https://github.com/composibleIO/cio-ipfs-effector?branch=main)",
  "marine-rs-sdk",
 ]
 
@@ -531,6 +531,7 @@ dependencies = [
  "chrono",
  "cio-ipfs-effector-imports",
  "cio-response-types",
+ "ipfs-effector-imports",
  "log",
  "marine-rs-sdk",
  "marine-rs-sdk-test",
@@ -552,14 +553,6 @@ dependencies = [
  "serde",
  "serde_json",
  "walkdir",
-]
-
-[[package]]
-name = "cioVault"
-version = "0.1.0"
-dependencies = [
- "marine-rs-sdk",
- "marine-rs-sdk-test",
 ]
 
 [[package]]
@@ -815,9 +808,9 @@ dependencies = [
 [[package]]
 name = "curl-effector-imports"
 version = "0.1.1"
-source = "git+https://github.com/fluencelabs/curl-effector?branch=main#e820ea273fd30177ed7eef76358ad26089a35129"
+source = "git+https://github.com/fluencelabs/curl-effector.git?branch=main#e820ea273fd30177ed7eef76358ad26089a35129"
 dependencies = [
- "curl-effector-types 0.1.1 (git+https://github.com/fluencelabs/curl-effector?branch=main)",
+ "curl-effector-types 0.1.1 (git+https://github.com/fluencelabs/curl-effector.git?branch=main)",
  "marine-rs-sdk",
 ]
 
@@ -832,7 +825,7 @@ dependencies = [
 [[package]]
 name = "curl-effector-types"
 version = "0.1.1"
-source = "git+https://github.com/fluencelabs/curl-effector?branch=main#e820ea273fd30177ed7eef76358ad26089a35129"
+source = "git+https://github.com/fluencelabs/curl-effector.git?branch=main#e820ea273fd30177ed7eef76358ad26089a35129"
 dependencies = [
  "marine-rs-sdk",
 ]
@@ -1806,9 +1799,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a611371471e98973dbcab4e0ec66c31a10bc356eeb4d54a0e05eac8158fe38c"
 
 [[package]]
+name = "ipfs-effector-imports"
+version = "0.1.1"
+source = "git+https://github.com/fluencelabs/ipfs-effector?branch=main#7d79cd4f3d55bb8242a82cada5dcf54a429b69a6"
+dependencies = [
+ "ipfs-effector-types 0.1.1 (git+https://github.com/fluencelabs/ipfs-effector?branch=main)",
+ "marine-rs-sdk",
+]
+
+[[package]]
 name = "ipfs-effector-types"
 version = "0.1.1"
 source = "git+https://github.com/composibleIO/cio-ipfs-effector?branch=main#6443d3f083dcb62bcd18739e51141628430c2ca9"
+dependencies = [
+ "marine-rs-sdk",
+]
+
+[[package]]
+name = "ipfs-effector-types"
+version = "0.1.1"
+source = "git+https://github.com/fluencelabs/ipfs-effector?branch=main#7d79cd4f3d55bb8242a82cada5dcf54a429b69a6"
 dependencies = [
  "marine-rs-sdk",
 ]
@@ -3869,6 +3879,7 @@ dependencies = [
  "chrono",
  "cio-curl-effector-imports",
  "cio-response-types",
+ "curl-effector-imports",
  "marine-rs-sdk",
  "marine-rs-sdk-test",
  "serde",

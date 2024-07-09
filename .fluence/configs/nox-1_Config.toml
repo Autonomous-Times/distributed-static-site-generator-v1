@@ -24,15 +24,27 @@ enable = [ "aqua-ipfs", "decider" ]
   ipfs_binary_path = "/usr/bin/ipfs"
 
 [effectors.curl]
-wasm_cid = "bafybeie52bp5eyfhzotkhsexhqhn67v5zddru224gtcv5gj7gvbxcvkhqe"
+wasm_cid = "bafybeiaodxccv2gkml2dfwwn3u5ah5t5vfhtsffjbzdz4mjmm3ljnyes5u"
 
   [effectors.curl.allowed_binaries]
   curl = "/usr/bin/curl"
 
+[effectors.cio_curl]
+wasm_cid = "bafybeie52bp5eyfhzotkhsexhqhn67v5zddru224gtcv5gj7gvbxcvkhqe"
+
+  [effectors.cio_curl.allowed_binaries]
+  curl = "/usr/bin/curl"
+
 [effectors.ipfs]
-wasm_cid = "bafkreifwz7ia6otb3czodw62hnpvvgnd2wezo4mp27x3vove4ubrtavida"
+wasm_cid = "bafkreifhl27umllns5cmylu7uzlmva3v2hhucbvlaz54whzb4cwoodpuoi"
 
   [effectors.ipfs.allowed_binaries]
+  ipfs = "/usr/bin/ipfs"
+
+[effectors.cio_ipfs]
+wasm_cid = "bafkreifwz7ia6otb3czodw62hnpvvgnd2wezo4mp27x3vove4ubrtavida"
+
+  [effectors.cio_ipfs.allowed_binaries]
   ipfs = "/usr/bin/ipfs"
 
 [effectors.tableland]

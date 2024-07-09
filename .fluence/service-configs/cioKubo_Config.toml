@@ -1,8 +1,8 @@
 total_memory_limit = "2GB"
 
 [[module]]
-name = "cio_ipfs_effector"
-load_from = "/home/joera/Documents/dsg/fluence/src/services/cioKubo/modules/cio-ipfs-effector/cio_ipfs_effector.wasm"
+name = "ipfs_effector"
+load_from = "/home/joera/Documents/dsg/fluence/src/services/cio-kubo/modules/ipfs-effector/ipfs_effector.wasm"
 
   [module.mounted_binaries]
   ipfs = "/usr/bin/ipfs"
@@ -10,8 +10,8 @@ load_from = "/home/joera/Documents/dsg/fluence/src/services/cioKubo/modules/cio-
 [module.wasi.mapped_dirs]
 "/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioKubo/service/tmp"
 "/storage" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioKubo/service/storage"
-"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioKubo/modules/cio_ipfs_effector/tmp/module"
-"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioKubo/modules/cio_ipfs_effector/storage/module"
+"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioKubo/modules/ipfs_effector/tmp/module"
+"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/cioKubo/modules/ipfs_effector/storage/module"
 "/tmp/vault" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/particles"
 
 [[module]]
