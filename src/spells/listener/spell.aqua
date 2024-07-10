@@ -254,8 +254,8 @@ func spell():
                     itsme = select(task_cid)
                     if itsme:
                         Spell.store_log("i was selected")
-                        contentItem = createContentItem(task)
-                        Spell.store_log("continue ... ")
+                        -- contentItem = createContentItem(task)
+                        -- Spell.store_log("continue ... ")
                         -- queue = createQueue(task, contentItem, amrs)
                         -- Spell.store_log("3")
                         -- for ros <- queue:       
