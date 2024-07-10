@@ -169,17 +169,17 @@ func getConsensusOnTask() -> string:
             if task.value != "":
                 task_cids <<- task.value
     Spell.store_log("done fetching tasks")
-    -- for c <- task_cids: 
-    --     Spell.store_log(c)
+    for c <- task_cids: 
+        Spell.store_log(c)
     counts = countUniques(task_cids)
-    -- for c <- counts: 
-        -- Spell.store_log(U32Srv.stringify(c))
+    for c <- counts: 
+        Spell.store_log(U32Srv.stringify(c))
     h = highest(counts)
     i = indexOf(counts,h)
-    -- Spell.store_log(I32Srv.stringify(i))
+    Spell.store_log(I32Srv.stringify(i))
     uniques = dedup(task_cids)
-    -- for u <- uniques: 
-        -- Spell.store_log(u)
+    for u <- uniques: 
+        Spell.store_log(u)
     <- uniques[i]
 
 func wrapHostCid(host: string, task_cid:string) -> CidWrapper:
