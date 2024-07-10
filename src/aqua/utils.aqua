@@ -37,7 +37,7 @@ func highest(array: []u32) -> u32:
         for aa <- array:
             if aa > a:
                 isHighest <<- false
-        if  isHighest[isHighest.length -1]:
+        if isHighest[isHighest.length -1]:
             value <<- a
     <- value!
 

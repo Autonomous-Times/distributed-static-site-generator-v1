@@ -138,7 +138,7 @@ func compareBlocks() -> bool:
         Spell.store_log(ConstructLogs.concat_strings("synced on block: ", blocks!))
         synced <<- true
     else:
-        Spell.store_log("syncing")
+        -- Spell.store_log("syncing")
         synced <<- false
     <- synced!
        
@@ -169,14 +169,14 @@ func getConsensusOnTask() -> string:
             if task.value != "":
                 task_cids <<- task.value
     Spell.store_log("done fetching tasks")
-    for c <- task_cids: 
-        Spell.store_log(c)
+    -- for c <- task_cids: 
+    --     Spell.store_log(c)
     counts = countUniques(task_cids)
     for c <- counts: 
         Spell.store_log(U32Srv.stringify(c))
     h = highest(counts)
     i = indexOf(counts,h)
-    Spell.store_log(I32Srv.stringify(i))
+    -- Spell.store_log(I32Srv.stringify(i))
     uniques = dedup(task_cids)
     for u <- uniques: 
         Spell.store_log(u)
@@ -246,22 +246,24 @@ func spell():
                 task_cid = CioKubo.add(SUBNETKUBO, task_string)
                 Spell.store_log(ConstructLogs.concat_strings("assembled task: ", task_cid))
                 Spell.set_string("currentTask", task_cid)
-                Spell.store_log("continue ... ")
-                c = getConsensusOnTask()
-                Spell.store_log(ConstructLogs.concat_strings("consensus on task cid: ", c))
-                if c == task_cid: 
-                    Spell.store_log("i have agreed upon task")
-                    itsme = select(task_cid)
-                    if itsme:
-                        Spell.store_log("i was selected")
-                        -- contentItem = createContentItem(task)
-                        -- Spell.store_log("continue ... ")
-                        -- queue = createQueue(task, contentItem, amrs)
-                        -- Spell.store_log("3")
-                        -- for ros <- queue:       
-                        --     for ro <- ros: 
-                        --         Spell.store_log(ro.name)
-                        -- for amr <- amrs:
-                        --     Spell.store_log(amr.result)
-                    else: 
-                        Spell.store_log("doing nothing this time")
+
+                -- Spell.store_log("continue ... ")
+                Spell.store_log("skipping task consensus")
+                -- c = getConsensusOnTask()
+                -- Spell.store_log(ConstructLogs.concat_strings("consensus on task cid: ", c))
+                -- if c == task_cid: 
+                Spell.store_log("i have agreed upon task")
+                itsme = select(task_cid)
+                if itsme:
+                    Spell.store_log("i was selected")
+                    -- contentItem = createContentItem(task)
+                    -- Spell.store_log("continue ... ")
+                    -- queue = createQueue(task, contentItem, amrs)
+                    -- Spell.store_log("3")
+                    -- for ros <- queue:       
+                    --     for ro <- ros: 
+                    --         Spell.store_log(ro.name)
+                    -- for amr <- amrs:
+                    --     Spell.store_log(amr.result)
+                else: 
+                    Spell.store_log("doing nothing this time")
