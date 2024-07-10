@@ -233,20 +233,19 @@ func spell():
     for log <- eventLogs:
         Spell.store_log(ConstructLogs.concat_strings("event received from tx: ", log.transaction_hash))
         Spell.set_string("latest_block", log.block_number)
-        tasks: *DsgTask
-        try:
-            tasks <- assembleTask(log.params!,log.params[1],log.params[2])   
-        otherwise:
-            Spell.store_log("failed to assemble task")
-        if tasks.length > 0:
-            task = tasks!
-            task_string = TaskToString.stringify(task)  
-            task_cid = CioKubo.add(SUBNETKUBO, task_string)
-            Spell.store_log(ConstructLogs.concat_strings("assembled task: ", task_cid))
-            Spell.set_string("currentTask", task_cid)
-
-            synced = waitForBlockSync()   
-            if synced:        
+        synced = waitForBlockSync()   
+        if synced: 
+            tasks: *DsgTask
+            try:
+                tasks <- assembleTask(log.params!,log.params[1],log.params[2])   
+            otherwise:
+                Spell.store_log("failed to assemble task")
+            if tasks.length > 0:
+                task = tasks!
+                task_string = TaskToString.stringify(task)  
+                task_cid = CioKubo.add(SUBNETKUBO, task_string)
+                Spell.store_log(ConstructLogs.concat_strings("assembled task: ", task_cid))
+                Spell.set_string("currentTask", task_cid)
                 Spell.store_log("continue ... ")
                 c = getConsensusOnTask()
                 Spell.store_log(ConstructLogs.concat_strings("consensus on task cid: ", c))
