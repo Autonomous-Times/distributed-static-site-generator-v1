@@ -482,6 +482,7 @@ dependencies = [
 [[package]]
 name = "cio-evm-imports"
 version = "0.1.0"
+source = "git+https://github.com/composibleIO/cio-evm?branch=main#efb1d20ff4d0149d840a3172f0289eb28be17bf0"
 dependencies = [
  "cio-response-types",
  "ethabi 18.0.0",

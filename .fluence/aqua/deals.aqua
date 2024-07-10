@@ -5,7 +5,6 @@ data ContentWorkerV1:
     dealId: string
     dealIdOriginal: string
     definition: string
-    matched: bool
     timestamp: string
 
 data RenderWorkerV0:
@@ -13,7 +12,6 @@ data RenderWorkerV0:
     dealId: string
     dealIdOriginal: string
     definition: string
-    matched: bool
     timestamp: string
 
 data TaskWorkerV1:
@@ -21,7 +19,6 @@ data TaskWorkerV1:
     dealId: string
     dealIdOriginal: string
     definition: string
-    matched: bool
     timestamp: string
 
 data WebHostWorkerV0:
@@ -41,28 +38,25 @@ data Deals:
 func get() -> Deals:
     <- Deals(
         taskWorkerV1=?[TaskWorkerV1(
-            definition="bafkreihssu34lqhdok3wmsrxq3rwumeiyt4tapyrew4tmxzjnhxyh3mcpm",
-            timestamp="2024-07-09T16:46:50.797Z",
+            definition="bafkreifzneee4hcyotixialxko7vtlb2kli6jzepzlisqetsmkjedz2pke",
+            timestamp="2024-07-10T16:37:11.607Z",
             dealIdOriginal="0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
             dealId="ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b",
-            chainNetworkId=31337,
-            matched=true
+            chainNetworkId=31337
         )],
         contentWorkerV1=?[ContentWorkerV1(
-            definition="bafkreifzbdepgey3b6wvh7wkezkds4pz7ejcsrtpwsqd65tnldfynae4ym",
-            timestamp="2024-07-09T16:47:08.865Z",
+            definition="bafkreiawg3lgvov7sjs56gy2kv5unzo44pcuphsjgrjoddbw7gsrruxida",
+            timestamp="2024-07-10T16:37:15.901Z",
             dealIdOriginal="0x18998c7E38ede4dF09cEec08E5372Bf8fe5719ea",
             dealId="18998c7e38ede4df09ceec08e5372bf8fe5719ea",
-            chainNetworkId=31337,
-            matched=true
+            chainNetworkId=31337
         )],
         renderWorkerV0=?[RenderWorkerV0(
-            definition="bafkreidlfjsthrzmhncej3g3f5ol3zkmewayzrcm2fqcxontgkswutqesi",
-            timestamp="2024-07-09T16:47:21.651Z",
+            definition="bafkreid5xgoipgm24xgdtw4yfms5mpuarmlmyqmwj7qicxmltrz4ammvqi",
+            timestamp="2024-07-10T16:37:20.176Z",
             dealIdOriginal="0x2901bb75a1f4B0ac205CB2e68986A53E3480eB56",
             dealId="2901bb75a1f4b0ac205cb2e68986a53e3480eb56",
-            chainNetworkId=31337,
-            matched=true
+            chainNetworkId=31337
         )],
         webHostWorkerV0=?[WebHostWorkerV0(
             definition="bafkreicxactzea2wqqiz2qt5gj4pavo626kmpmqg6bz7432kkmjd7ug53q",
