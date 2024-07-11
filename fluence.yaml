@@ -20,7 +20,7 @@ deployments:
     pricePerWorkerEpoch: "0.0001"
     initialBalance: "1"
     services: [ tuContentStore, cioKubo, dsgContent ]
-    spells: []
+    spells: [ content ]
   renderWorkerV0:
     targetWorkers: 3
     pricePerWorkerEpoch: "0.0001"
@@ -70,6 +70,8 @@ services:
 spells:
   listener:
     get: src/spells/listener
+  content:
+    get: src/spells/content
 
 customFluenceEnv:
   contractsEnv: kras

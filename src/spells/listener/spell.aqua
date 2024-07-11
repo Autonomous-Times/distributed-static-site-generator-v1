@@ -15,34 +15,6 @@ import "../../aqua/utils.aqua"
 func lastAMRResult(rs: *AMResponse) -> string:
      <- rs[rs.length - 1].result
 
-func createQueue(task: DsgTask, contentItem: DsgContentItem, amrs: *AMResponse) -> *[]DsgRenderObject:
-
-    queue: *[]DsgRenderObject
-
-    main = DsgContent.pebble(task, contentItem)
-    queue <<- main
-    -- for ripple <- main!.template.ripples:   
-    --     amrs <- ContentStore.queryRipple(ripple, task.publication.table) 
-    --     for item <- Parse.contentItems(lastAMRResult(amrs)): 
-    --         queue <- DsgContent.ripple(task, ripple, item)
-
-    <- queue
-
-func createContentItem(task: DsgTask) -> DsgContentItem:
-
-    Spell "listener"
-    queue: *[]DsgRenderObject
-    cw = randomContentWorker()
-    -- Spell.store_log(cw.worker_id!)
-    on cw.worker_id! via cw.host_id:  
-        mapping = CioKubo.get(WEBHOSTKUBO, task.author.content_mappings)
-        mapped = DsgContent.map(task, mapping)
-        content_cid <- CioKubo.add(WEBHOSTKUBO, mapped.body) 
-        contentItem = DsgContent.includeCid(mapped.item, content_cid)
-    --     -- amrs <- ContentStore.insert(contentItem, task.publication.table, false) 
-    <- contentItem
-            
-
 func assembleTask(author: string, publication: string, content: string) -> DsgTask:
 
     Spell "listener"
@@ -246,24 +218,21 @@ func spell():
                 task_cid = CioKubo.add(SUBNETKUBO, task_string)
                 Spell.store_log(ConstructLogs.concat_strings("assembled task: ", task_cid))
                 Spell.set_string("currentTask", task_cid)
-
                 -- Spell.store_log("continue ... ")
                 Spell.store_log("skipping task consensus")
                 -- c = getConsensusOnTask()
                 -- Spell.store_log(ConstructLogs.concat_strings("consensus on task cid: ", c))
                 -- if c == task_cid: 
-                Spell.store_log("i have agreed upon task")
+                -- Spell.store_log("i have agreed upon task")
                 itsme = select(task_cid)
                 if itsme:
                     Spell.store_log("i was selected")
-                    -- contentItem = createContentItem(task)
-                    -- Spell.store_log("continue ... ")
-                    -- queue = createQueue(task, contentItem, amrs)
-                    -- Spell.store_log("3")
-                    -- for ros <- queue:       
-                    --     for ro <- ros: 
-                    --         Spell.store_log(ro.name)
-                    -- for amr <- amrs:
-                    --     Spell.store_log(amr.result)
+                    cws = getContentWorkers()
+                    for cw <- cws: 
+                        on cw.worker_id! via cw.host_id: 
+                            Spell "content"
+                            Spell.push_mailbox(task_cid)
+                    Spell.store_log("send out tasks to content workers")
+
                 else: 
                     Spell.store_log("doing nothing this time")
