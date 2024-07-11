@@ -30,6 +30,9 @@ service DsgAuthorFromJson("json"):
 service DsgRawContentFromJson("json"):
   parse(s: string) -> DsgRawContent
 
+service TaskFromString("json"):
+  parse(s: string) -> DsgTask
+
 service DsgContentToJson("debug"):
   stringify(c: DsgRawContent) -> string 
 

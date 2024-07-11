@@ -11,5 +11,5 @@ aquaFilePath: ./spell.aqua
 function: spell
 
 clock:
-  periodSec: 10
-  endDelaySec: 1800
+  periodSec: 4
+  endDelaySec: 18000

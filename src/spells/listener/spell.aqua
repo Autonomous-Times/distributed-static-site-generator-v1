@@ -9,6 +9,7 @@ import "../../aqua/constants.aqua"
 import "../../aqua/services.aqua"
 import "../../aqua/helpers.aqua"
 import "../../aqua/utils.aqua"
+import "../../aqua/consensus.aqua"
 
 -- import "../../aqua/task.aqua"
 
@@ -93,41 +94,7 @@ func initFilter():
     if filter.absent:
         newFilter()
 
-func compareBlocks() -> bool: 
 
-    Spell "listener"
-    blocks: *string
-    ws = getTaskWorkers()
-    synced: *bool
-    for w <- ws: 
-        on w.worker_id! via w.host_id:
-            Spell "listener"
-            lb = Spell.get_string("latest_block")
-            blocks <<- lb.value
-    -- for b <- blocks:
-    --     Spell.store_log(b)
-    if blocks! == blocks[1] && blocks! == blocks[2]: 
-        Spell.store_log(ConstructLogs.concat_strings("synced on block: ", blocks!))
-        synced <<- true
-    else:
-        -- Spell.store_log("syncing")
-        synced <<- false
-    <- synced!
-       
-func waitForBlockSync() -> bool:
-
-    Spell "listener"
-    synced: *bool
-    synced <<- false
-    array = [1,2,3,4,5,6,7,8,9]
-    for i <- array:
-        if synced[synced.length - 1] != true:
-            s = compareBlocks()
-            if s:
-                synced <<- true
-            else:
-                Peer.timeout(1000,"some spacetime")
-    <- synced[synced.length - 1]
 
 func getConsensusOnTask() -> string: 
 
@@ -153,46 +120,6 @@ func getConsensusOnTask() -> string:
     for u <- uniques: 
         Spell.store_log(u)
     <- uniques[i]
-
-func wrapHostCid(host: string, task_cid:string) -> CidWrapper:
-    <- CidWrapper(host = host, task_cid = task_cid)
-
-func select(task_cid: string) -> bool: 
-
-    Spell "listener"
-    itsme: *bool 
-    itsme <<- true
-    me <- CioConsensus.whoami()
-    Spell.store_log(ConstructLogs.concat_strings("my host_id: ", me))
-    distances: *i32
-    for w <- getOtherTaskWorkers(me): 
-        on w.worker_id! via w.host_id:
-            try:
-                    -- using only host_id skews distribution within worker with fixed host_ids 
-                    -- adding another agreed upon el to the mix! blocktime or taskcid
-                host_cid = CioKubo.add(WEBHOSTKUBO, 
-                    CidWrapperToString.stringify(
-                        wrapHostCid(w.host_id, task_cid)
-                    )
-                )
-                distances <- CioConsensus.getXORDistance(host_cid, task_cid)
-            otherwise: 
-                distances <<- 101
-    for d <- distances:
-        Spell.store_log(ConstructLogs.concat_strings("xor between other worker & task cid: ", I32Srv.stringify(d)))
-
-    cid = CioKubo.add(WEBHOSTKUBO, 
-        CidWrapperToString.stringify(
-            wrapHostCid(me, task_cid)
-        )
-    )
-    my_distance = CioConsensus.getXORDistance(cid, task_cid) 
-    Spell.store_log(ConstructLogs.concat_strings("xor between me & task cids: ", I32Srv.stringify(my_distance)))
-
-    for d <- distances:
-        if d > my_distance:     
-            itsme <<- false
-    <- itsme[itsme.length - 1]
 
 func spell():
 
