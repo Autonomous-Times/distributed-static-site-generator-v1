@@ -7,6 +7,9 @@ use "../../.fluence/aqua/deals.aqua"
 import "./services.aqua"
 import "./types.aqua"
 
+func lastAMRResult(rs: *AMResponse) -> string:
+     <- rs[rs.length - 1].result
+
 func getTaskWorkers() -> []Worker:
 
     deals <- Deals.get()
@@ -45,7 +48,7 @@ func randomContentWorker() -> Worker:
 func getRenderWorkers() -> []Worker:
 
     deals <- Deals.get()
-    dealId = deals.renderWorkerV0!.dealIdOriginal
+    dealId = deals.renderWorkerV1!.dealIdOriginal
     on HOST_PEER_ID:
         subnet <- Subnet.resolve(dealId)
     if subnet.success == false:
@@ -59,7 +62,7 @@ func randomRenderWorker() -> Worker:
 func getWebHostWorkers() -> []Worker:
 
     deals <- Deals.get()
-    dealId = deals.webHostWorkerV0!.dealIdOriginal
+    dealId = deals.webHostWorkerV1!.dealIdOriginal
     on HOST_PEER_ID:
         subnet <- Subnet.resolve(dealId)
     if subnet.success == false:
@@ -67,8 +70,16 @@ func getWebHostWorkers() -> []Worker:
     
     <- subnet.workers
 
-func randomWebHostWorker() -> Worker:
-    <- getWebHostWorkers()!
+-- func getSignerWorkers() -> []Worker:
+
+--     deals <- Deals.get()
+--     dealId = deals.signerWorkerV1!.dealIdOriginal
+--     on HOST_PEER_ID:
+--         subnet <- Subnet.resolve(dealId)
+--     if subnet.success == false:
+--         Console.print(["Failed to resolve subnet: ", subnet.error])
+    
+--     <- subnet.workers
 
 func stringtoAMResult(s: string) -> AquaMarineResult:
 

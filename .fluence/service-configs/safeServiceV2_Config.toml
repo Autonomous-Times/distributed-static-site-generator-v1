@@ -1,0 +1,26 @@
+total_memory_limit = "2GB"
+
+[[module]]
+name = "curl_effector"
+load_from = "/home/joera/Documents/dsg/fluence/src/services/safeServiceV2/modules/curl-effector/curl_effector.wasm"
+
+  [module.mounted_binaries]
+  ipfs = "/usr/bin/curl"
+
+[module.wasi.mapped_dirs]
+"/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/safeServiceV2/service/tmp"
+"/storage" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/safeServiceV2/service/storage"
+"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/safeServiceV2/modules/curl_effector/tmp/module"
+"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/safeServiceV2/modules/curl_effector/storage/module"
+"/tmp/vault" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/particles"
+
+[[module]]
+name = "safe-facade"
+load_from = "/home/joera/Documents/dsg/fluence/target/wasm32-wasi/release/safe-facade.wasm"
+
+[module.wasi.mapped_dirs]
+"/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/safeServiceV2/service/tmp"
+"/storage" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/safeServiceV2/service/storage"
+"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/safeServiceV2/modules/safe-facade/tmp/module"
+"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/safeServiceV2/modules/safe-facade/storage/module"
+"/tmp/vault" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/particles"

@@ -1,4 +1,12 @@
-#![allow(non_snake_case)]
+#![allow(
+    unused_variables, 
+    unused_imports, 
+    deprecated, 
+    non_snake_case,
+    dead_code
+)]
+
+use cio_evm::utils::cleanJson;
 use marine_rs_sdk::marine;
 use marine_rs_sdk::module_manifest;
 use cio_response_types::AMResponse;
@@ -7,101 +15,85 @@ use std::fs;
 use serde_json::Value;
 use marine_rs_sdk::get_call_parameters;
 use chrono::Utc;
-// use std::path::PathBuf;
+use std::path::{Path, PathBuf};
+
+use cio_evm::{
+    abi,
+    params,
+    tx,
+    rpc,
+    types
+};
 
 module_manifest!();
 
-#[marine]
-#[derive(Debug)]
-pub struct EventLog {
-    address: String,
-    block_number: String,
-    params: Vec<String>,
-    transaction_hash: String
-}
-
-#[marine]
-#[derive(Debug)]
-pub struct AMEventLogResult {
-    success: bool,
-    results: Vec<EventLog>,
-    error: String
-}
-
-mod request;
 
 pub fn main() {}
 
 #[marine]
-pub fn read_from_rpc(contract_address: String, function_name: String, args: Vec<String>, rpc_url: String) -> AMResponse {
+pub fn prep_write(chain_id: u64, contract_address: String, function: String, args: String, sender: String, rpc: String) -> String {
 
-    // use_contract!(MyContract, "../../abi.json");
+    let params = params::encode_args(
+        function, 
+        args
+    ).unwrap();
 
-    println!("kukelekuu 0");
+    let tx_request = tx::legacy(chain_id, params.into(), contract_address, sender, rpc).unwrap();
 
-    let data = cio_evm_imports::prepare_eth_call(contract_address, function_name, args);
+    serde_json::to_string(&tx_request).unwrap()
+}
 
-    println!("kukelekuu 1");
+#[marine]
+pub fn exec_write(tx_request_string: String, signatures: Vec<String>, rpc: String) -> String {
 
-    let target_path = crate::vault_path("evm_response");
-    let response = request::create(data, &rpc_url, &target_path);
-    
+    let data = tx::wrapLegacy(tx_request_string, signatures);
+    let res = rpc::send_raw_tx(&rpc, data);
+
+    match res {
+        Ok(r) => r,
+        Err(err) => "error writin".to_string()
+    }
+}
+
+#[marine]
+pub fn read(contract_address: String, function: String, args: String, rpc: String) -> AMResponse {
+
+    let params = params::encode_args(function.clone(), args).unwrap();
+
+    let response = rpc::call(contract_address, params, &rpc).unwrap();
+
+    println!("kanariez response {:?}", response);
+
+    let bytes = hex::decode(response[2..].to_string()).unwrap();
+
+    let o  = params::decode(function, bytes).unwrap();
+
     let timestamp = Utc::now().timestamp_millis();
     let cp = get_call_parameters();
-
-    println!("kukelekuu 2");
-
-    if response.success {
-        let result_raw = fs::read_to_string(target_path).unwrap();
-        let v: Value = serde_json::from_str(&result_raw).unwrap();
-
-        println!("kukelekuu 3 {:?}", v);
-
-        let result = cio_evm_imports::parse_result(v["result"].to_string().replace("\"","")); // crate::utils::remove_zero_x(v["result"].to_string());
-
-        return AMResponse {
-            success: true,
-            result,
-            result_raw,
-            timestamp,
-            host_id: cp.host_id
-        }  
-
-    } else {
-
-        println!("kukelekuu 4");
-
-        return AMResponse {
-            success: false,
-            result_raw: String::from(""),
-            result: response.error,
-            timestamp,
-            host_id: cp.host_id
-        }  
-    }
+    
+    AMResponse {
+        success: true,  
+        result_raw: String::from(""),
+        result: cleanJson(&o[0]),
+        timestamp,
+        host_id: cp.host_id
+    }  
 }
 
 #[marine]
 pub fn create_filter(contract_address: String, topic: String, latest_block: String, rpc_url: String) -> AMResponse {
 
-    let data = cio_evm_imports::prepare_create_filter(contract_address, topic, latest_block);
-
-    let target_path = crate::vault_path("evm_response");
-    let response = request::create(data, &rpc_url, &target_path);
+    let response = rpc::create_filter(contract_address, topic, latest_block, &rpc_url);
 
     let timestamp = Utc::now().timestamp_millis();
     let cp = get_call_parameters();
 
-    if response.success {
-        let result_raw = fs::read_to_string(target_path).unwrap();
-        let v: Value = serde_json::from_str(&result_raw).unwrap();
-
-        let result = v["result"].to_string().replace("\"",""); // crate::utils::remove_zero_x(v["result"].to_string());
-
+    if let Ok(result) = response {
+     
         return AMResponse {
             success: true,
             result,
-            result_raw,
+            result_raw: String::from(""),
             timestamp,
             host_id: cp.host_id
         }  
@@ -111,7 +103,7 @@ pub fn create_filter(contract_address: String, topic: String, latest_block: Stri
         return AMResponse {
             success: false,
             result_raw: String::from(""),
-            result: response.error,
+            result: response.unwrap(),
             timestamp,
             host_id: cp.host_id
         }  
@@ -119,65 +111,33 @@ pub fn create_filter(contract_address: String, topic: String, latest_block: Stri
 }
 
 #[marine]
-pub fn poll_filter(filter: String, rpc_url: String) -> AMEventLogResult {
+pub fn poll_filter(filter: String, rpc_url: String) -> crate::types::AMEventLogResult {
 
-    let mut logs: Vec<EventLog> = vec!();
-
-    let data = cio_evm_imports::prepare_poll_filter(filter);
-
-    let target_path = crate::vault_path("evm_response");
-    let response = request::create(data, &rpc_url, &target_path);
+    let response = rpc::poll_filter(filter, &rpc_url);
     
-    // let timestamp = Utc::now().timestamp_millis();
-    // let cp = get_call_parameters();
-
-    if response.success {
-        let result_raw = fs::read_to_string(target_path.clone()).unwrap();
-        let v: Value = serde_json::from_str(&result_raw).unwrap();
-        
-        if let Some(array) = v["result"].as_array() {
-
-            for l in array {
-
-                let mut log = EventLog {
-                    address: l["address"].to_string().replace("\"",""),
-                    block_number: l["blockNumber"].to_string().replace("\"",""),
-                    params: vec!(),
-                    transaction_hash: l["transactionHash"].to_string().replace("\"","")
-                };
-
-                log.params.push(
-                    cio_evm_imports::decode_address(l["topics"][1].to_string().replace("\"",""))
-                );
-
-                log.params.push(
-                    cio_evm_imports::decode_address(l["topics"][2].to_string().replace("\"",""))
-                );
-
-                log.params.push(
-                    cio_evm_imports::decode_string(l["data"].to_string().replace("\"",""))
-                );
-
-                println!("kukeleku: {:?}",log);
-        
-                logs.push(log);
-            }
-        }
-
-        return AMEventLogResult {
+    if let Ok(logs) = response {
+    
+        return crate::types::AMEventLogResult {
             success: true,
             results: logs,
             error: String::from("")
         }
     } else {
 
-        return AMEventLogResult {
+        return crate::types::AMEventLogResult {
             success: false,
-            results: logs,
-            error: response.error
+            results: vec![],
+            error: "".to_string()
         }
     }
+
+
+
+
+     
 }
+
+
 
 fn vault_path(filename: &str) -> String {
     let cp = marine_rs_sdk::get_call_parameters();

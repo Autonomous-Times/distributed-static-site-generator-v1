@@ -5,13 +5,15 @@ data ContentWorkerV1:
     dealId: string
     dealIdOriginal: string
     definition: string
+    matched: bool
     timestamp: string
 
-data RenderWorkerV0:
+data RenderWorkerV1:
     chainNetworkId: u64
     dealId: string
     dealIdOriginal: string
     definition: string
+    matched: bool
     timestamp: string
 
 data TaskWorkerV1:
@@ -19,9 +21,10 @@ data TaskWorkerV1:
     dealId: string
     dealIdOriginal: string
     definition: string
+    matched: bool
     timestamp: string
 
-data WebHostWorkerV0:
+data WebHostWorkerV1:
     chainNetworkId: u64
     dealId: string
     dealIdOriginal: string
@@ -31,36 +34,39 @@ data WebHostWorkerV0:
 
 data Deals:
     contentWorkerV1: ?ContentWorkerV1
-    renderWorkerV0: ?RenderWorkerV0
+    renderWorkerV1: ?RenderWorkerV1
     taskWorkerV1: ?TaskWorkerV1
-    webHostWorkerV0: ?WebHostWorkerV0
+    webHostWorkerV1: ?WebHostWorkerV1
 
 func get() -> Deals:
     <- Deals(
         taskWorkerV1=?[TaskWorkerV1(
-            definition="bafkreifzneee4hcyotixialxko7vtlb2kli6jzepzlisqetsmkjedz2pke",
-            timestamp="2024-07-10T16:37:11.607Z",
+            definition="bafkreidktt7rjpj533davouup3gsvwk66urxr7oygotkb6vmc2orrm7lr4",
+            timestamp="2024-10-12T07:38:33.122Z",
             dealIdOriginal="0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
             dealId="ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b",
-            chainNetworkId=31337
+            chainNetworkId=31337,
+            matched=true
         )],
         contentWorkerV1=?[ContentWorkerV1(
-            definition="bafkreiawg3lgvov7sjs56gy2kv5unzo44pcuphsjgrjoddbw7gsrruxida",
-            timestamp="2024-07-10T16:37:15.901Z",
+            definition="bafkreigl6efgnc5ksfozruesb6l3mjtuoztf5lzqlgefrsych3xgamqc6u",
+            timestamp="2024-10-12T07:38:41.872Z",
             dealIdOriginal="0x18998c7E38ede4dF09cEec08E5372Bf8fe5719ea",
             dealId="18998c7e38ede4df09ceec08e5372bf8fe5719ea",
-            chainNetworkId=31337
+            chainNetworkId=31337,
+            matched=true
         )],
-        renderWorkerV0=?[RenderWorkerV0(
-            definition="bafkreid5xgoipgm24xgdtw4yfms5mpuarmlmyqmwj7qicxmltrz4ammvqi",
-            timestamp="2024-07-10T16:37:20.176Z",
+        renderWorkerV1=?[RenderWorkerV1(
+            definition="bafkreig5yj7cfqdtrbnqh7qs2ehfxfktkgx7va6obfi6tmk4qknc3o2g3i",
+            timestamp="2024-10-12T07:38:54.480Z",
             dealIdOriginal="0x2901bb75a1f4B0ac205CB2e68986A53E3480eB56",
             dealId="2901bb75a1f4b0ac205cb2e68986a53e3480eb56",
-            chainNetworkId=31337
+            chainNetworkId=31337,
+            matched=true
         )],
-        webHostWorkerV0=?[WebHostWorkerV0(
-            definition="bafkreicxactzea2wqqiz2qt5gj4pavo626kmpmqg6bz7432kkmjd7ug53q",
-            timestamp="2024-07-09T16:47:34.398Z",
+        webHostWorkerV1=?[WebHostWorkerV1(
+            definition="bafkreiemqriysrccogswgmmta7c3jz4dsx732djuwk2qqad5dvkfzsmwjm",
+            timestamp="2024-10-12T07:39:07.084Z",
             dealIdOriginal="0x541Dfe503202b78c5d78FaCd6CDB0a04D4b35634",
             dealId="541dfe503202b78c5d78facd6cdb0a04d4b35634",
             chainNetworkId=31337,

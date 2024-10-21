@@ -25,14 +25,19 @@ data DsgRawContent:
   content: string
 
 data DsgContentItem:
-  slug: string
-  post_type: string
-  tags: string
+  author: string
   categories: string
-  parent: string
-  creation_date: string
-  modified_date: string
   content_cid: string
+  creation_date: string
+  id: string
+  modified_date: string
+  parent: string
+  publication: string
+  post_type: string
+  slug: string
+  tags: string
+  title: string
+  
 
 data DsgAuthorData:
   name: string
@@ -73,23 +78,19 @@ data DsgTemplate:
 data DsgTable:
   id: string
   gateway: string
-  owner: string
 
 data DsgPublication:
   assets: string
+  contract: string
+  controller: string
   domains: []DsgDomain
-  governor: string
   mapping: []DsgTemplate
   name: string
-  templates: string
+  rpc: string
   table: DsgTable
-
-data DsgTask:
-  slug: string
-  author: DsgAuthorData
-  payload: string
-  post_type: string
-  publication: DsgPublication
+  templates: string
+  storage: string
+  
 
 data DsgRenderObject:
   name: string
@@ -99,12 +100,14 @@ data DsgRenderObject:
   domain: DsgDomain
   body_cid: string
 
--- data TuDsgPublishTaskTemp:
---   author: string
---   payload: string
---   publication: string
---   post_type: string
---   slug: string
+data DsgTask:
+  slug: string
+  author: DsgAuthorData
+  payload: string
+  post_type: string
+  publication: DsgPublication
+  items: []DsgRenderObject
+  hash: string
 
 data EventLog: 
   address: string

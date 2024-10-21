@@ -24,7 +24,7 @@ nox:
       wasmCID: bafkreifwz7ia6otb3czodw62hnpvvgnd2wezo4mp27x3vove4ubrtavida
       allowedBinaries:
         ipfs: /usr/bin/ipfs
-    tableland:
+    cio-tableland:
       wasmCID: bafybeihathubxccjb2zj2i64v5o43tera4sjk46zuaeithg2ula5i7xuq4
       allowedBinaries:
         curl: /usr/bin/curl

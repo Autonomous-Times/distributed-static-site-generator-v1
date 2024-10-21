@@ -22,17 +22,18 @@ data DsgCollection:
   query: string
 
 data DsgContentItem:
-  title: string
-  slug: string
-  publication: string
   author: string
-  post_type: string
-  tags: string
   categories: string
-  parent: string
-  creation_date: string
-  modified_date: string
   content_cid: string
+  creation_date: string
+  id: string
+  modified_date: string
+  parent: string
+  post_type: string
+  publication: string
+  slug: string
+  tags: string
+  title: string
 
 data DsgRipple:
   query: string
@@ -42,12 +43,13 @@ data DsgRipple:
 data DsgTable:
   id: string
   gateway: string
-  owner: string
 
 service TuContentStore("tuContentStore"):
+  deleteItem(id: string, table: DsgTable) -> AMResponse
   insert(content: DsgContentItem, dsg_table: DsgTable, optimistic: bool) -> AMResponse
   queryCollection(collection: DsgCollection, table: DsgTable) -> AMResponse
   queryCollectionCids(collection: DsgCollection, table: DsgTable) -> AMResponse
+  queryPostType(post_type: string, table: DsgTable, limit: u32, offset: u32) -> AMResponse
   queryRipple(ripple: DsgRipple, table: DsgTable) -> AMResponse
 
 
@@ -56,10 +58,11 @@ service CioPinata("cioPinata"):
   addFolder(folder: string, pinataJWTKey: string) -> AMResponse
 
 
-data AquaMarineResult:
-  output: [][]u8
-  results: []string
-  errors: []string
+service CioVault("cioVault"):
+  dir(path: string) -> bool
+  inspect(path: string) -> []string
+  write(data: string, path: string) -> bool
+
 
 data DsgDns:
   custodian: string
@@ -79,31 +82,15 @@ data DsgTemplate:
 
 data DsgPublication:
   assets: string
+  contract: string
+  controller: string
   domains: []DsgDomain
-  governor: string
   mapping: []DsgTemplate
   name: string
-  templates: string
+  storage: string
   table: DsgTable
-
-data DsgRenderObject:
-  name: string
-  post_type: string
-  template: DsgTemplate
-  publication_name: string
-  domain: DsgDomain
-  body_cid: string
-
-service TuDsgRenderer("tuDsgRenderer"):
-  map(ro: DsgRenderObject, body_: string, content: [][]DsgContentItem, publication: DsgPublication) -> AquaMarineResult
-  single(ro: DsgRenderObject, td: []u8) -> AquaMarineResult
-
-
-service CioVault("cioVault"):
-  dir(path: string) -> bool
-  inspect(path: string) -> []string
-  write(data: string, path: string) -> bool
-
+  templates: string
+  rpc: string
 
 service TuDsgWebHost("tuDsgWebHost"):
   update(publication: DsgPublication, cid: string) -> AMResponse
@@ -122,8 +109,10 @@ data AMEventLogResult:
 
 service Npublication("nPublication"):
   create_filter(contract_address: string, topic: string, latest_block: string, rpc_url: string) -> AMResponse
+  exec_write(tx_request_string: string, signatures: []string, rpc: string) -> string
   poll_filter(filter: string, rpc_url: string) -> AMEventLogResult
-  read_from_rpc(contract_address: string, function_name: string, args: []string, rpc_url: string) -> AMResponse
+  prep_write(chain_id: u64, contract_address: string, function: string, args: string, sender: string, rpc: string) -> string
+  read(contract_address: string, function: string, args: string, rpc: string) -> AMResponse
 
 
 service CioConsensus("cioConsensus"):
@@ -141,15 +130,48 @@ data DsgMapped:
   item: DsgContentItem
   body: string
 
+data DsgRenderObject:
+  name: string
+  post_type: string
+  template: DsgTemplate
+  publication_name: string
+  domain: DsgDomain
+  body_cid: string
+
 data DsgTask:
-  slug: string
   author: DsgAuthorData
+  hash: string
+  items: []DsgRenderObject
   payload: string
   post_type: string
   publication: DsgPublication
+  slug: string
 
 service DsgContent("dsgContent"):
   includeCid(content: DsgContentItem, cid: string) -> DsgContentItem
   map(task: DsgTask, mappings: string) -> DsgMapped
-  pebble(task: DsgTask, contentItem: DsgContentItem) -> []DsgRenderObject
-  ripple(task: DsgTask, ripple: DsgRipple, contentItem: DsgContentItem) -> []DsgRenderObject
+  pebble(task: DsgTask, contentItem: DsgContentItem) -> DsgRenderObject
+  ripple(task: DsgTask, ripple: DsgRipple, contentItem: DsgContentItem) -> DsgRenderObject
+
+
+data AquaMarineResult:
+  output: [][]u8
+  results: []string
+  errors: []string
+
+service DsgRenderer("dsgRenderer"):
+  map(ro: DsgRenderObject, body_: string, content: [][]DsgContentItem, publication: DsgPublication) -> AquaMarineResult
+  single(ro: DsgRenderObject, td: []u8) -> AquaMarineResult
+  template(publication: DsgPublication, post_type: string) -> DsgTemplate
+
+
+service CioSigner("cioSigner"):
+  provision(key: string) -> string
+  public_address() -> string
+  rawtx(tx_request_string: string, chain_id: u64) -> string
+
+
+service CioSafe("cioSafe"):
+  exec_tx(tx_request_string: string, signatures: []string, rpc: string) -> string
+  tx_request(sender: string, chain_id: u64, factory_address: string, rpc: string, owners: []string, treshold: u8) -> string
+  tx_request_2(sender: string, chain_id: u64, publication_address: string, rpc: string, cid: string) -> string

@@ -47,10 +47,10 @@ wasm_cid = "bafkreifwz7ia6otb3czodw62hnpvvgnd2wezo4mp27x3vove4ubrtavida"
   [effectors.cio_ipfs.allowed_binaries]
   ipfs = "/usr/bin/ipfs"
 
-[effectors.tableland]
+[effectors.cio_tableland]
 wasm_cid = "bafybeihathubxccjb2zj2i64v5o43tera4sjk46zuaeithg2ula5i7xuq4"
 
-  [effectors.tableland.allowed_binaries]
+  [effectors.cio_tableland.allowed_binaries]
   curl = "/usr/bin/curl"
 
 [chain_config]

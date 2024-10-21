@@ -10,6 +10,9 @@ import "./types"
 service ConstructLogs("op"):
   concat_strings(a: string, b: string) -> string
 
+service Args("op"):
+  concat_strings(a: string, b: string, c: string) -> string
+
 service U64Srv("debug"): 
     stringify(i: u64) -> string
 
@@ -30,11 +33,21 @@ service DsgAuthorFromJson("json"):
 service DsgRawContentFromJson("json"):
   parse(s: string) -> DsgRawContent
 
+service DsgContentItemsFromJson("json"):
+  parse(s: string) -> []DsgContentItem
+
 service TaskFromString("json"):
   parse(s: string) -> DsgTask
 
+service StringToArray("json"):
+  parse(s: string) -> []string
+
+
 service DsgContentToJson("debug"):
   stringify(c: DsgRawContent) -> string 
+
+service DsgContentItemToJson("debug"):
+  stringify(c: DsgContentItem) -> string 
 
 service TaskToString("debug"):
   stringify(c: DsgTask) -> string 
@@ -42,22 +55,33 @@ service TaskToString("debug"):
 service CidWrapperToString("debug"): 
   stringify(c: CidWrapper) -> string 
 
+service DsgRenderObjectToString("debug"): 
+  stringify(c: DsgRenderObject) -> string 
+
+service ArrayToString("debug"): 
+  stringify(a: []string) -> string 
+
 service DsgContent("dsgContent"):
   includeCid(content: DsgContentItem, cid: string) -> DsgContentItem
   map(task: DsgTask, mappings: string) -> DsgMapped
-  pebble(task: DsgTask, contentItem: DsgContentItem) -> []DsgRenderObject
-  ripple(task: DsgTask, ripple: DsgRipple, contentItem: DsgContentItem) -> []DsgRenderObject
+  pebble(task: DsgTask, contentItem: DsgContentItem) -> DsgRenderObject
+  ripple(task: DsgTask, ripple: DsgRipple, contentItem: DsgContentItem) -> DsgRenderObject
 
-service ContentStore("contentStore"):
-  batch_insert(content: DsgContentItem, table: DsgTable) -> AMResponse
-  insert(content: DsgContentItem, table: DsgTable, optimistic: bool) -> AMResponse
+service ContentStore("tuContentStore"):
+  insert(content: DsgContentItem, dsg_table: DsgTable, optimistic: bool) -> AMResponse
+  deleteItem(item_id: string, table: DsgTable) -> AMResponse
   queryCollection(collection: DsgCollection, table: DsgTable) -> AMResponse
   queryCollectionCids(collection: DsgCollection, table: DsgTable) -> AMResponse
+  queryPostType(post_type: string, table: DsgTable, limit: u32, offset: u32) -> AMResponse
   queryRipple(ripple: DsgRipple, table: DsgTable) -> AMResponse
+  
+
 
 service DsgRenderer("dsgRenderer"):
   map(ro: DsgRenderObject, body_: string, content: [][]DsgContentItem, publication: DsgPublication) -> AquaMarineResult
   single(ro: DsgRenderObject, td: []u8) -> AquaMarineResult
+  template(publication: DsgPublication, post_type: string) -> DsgTemplate
+
 
 service CioKubo("cioKubo"):
   add(ipfs_api: string, content: string) -> string
@@ -83,11 +107,22 @@ service DsgWebHost("tuDsgWebHost"):
 
 service Npublication("nPublication"):
   create_filter(contract_address: string, topic: string, latest_block: string, rpc_url: string) -> AMResponse
+  exec_write(tx_request_string: string, signatures: []string, rpc: string) -> string
   poll_filter(filter: string, rpc_url: string) -> AMEventLogResult
-  read_from_rpc(contract_address: string, function_name: string, args: []string, rpc_url: string) -> AMResponse
-  parse_with_alloy() -> bool
+  prep_write(chain_id: u64, contract_address: string, function: string, args: string, sender: string, rpc: string) -> string
+  read(contract_address: string, function: string, args: string, rpc: string) -> AMResponse
 
 service CioConsensus("cioConsensus"):
   getHammingDistance(worker_id: string, task: string) -> u32
   getXORDistance(cid1: string, cid2: string) -> i32
   whoami() -> string
+
+service CioSigner("cioSigner"):
+  provision(key: string) -> string
+  public_address() -> string
+  rawtx(tx_request_string: string, chain_id: u64) -> string
+
+
+service CioSafe("cioSafe"):
+  exec_tx(tx_request_string: string, signatures: []string, rpc: string) -> string
+  tx_request(sender: string, chain_id: u64, factory_address: string, rpc: string, owners: []string, treshold: u8) -> string

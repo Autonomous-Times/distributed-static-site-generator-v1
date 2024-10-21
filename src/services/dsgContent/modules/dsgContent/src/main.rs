@@ -30,11 +30,9 @@ pub fn main() {
 #[marine]
 pub fn map(task: DsgTask, mappings: &str) -> DsgMapped {
 
-    log::info!("kanarie HALLO DAN!");
-
     let payload : Value = serde_json::from_str(&task.payload).unwrap();
 
-    // log::info!("kanarie payload: {:?}", payload);
+    // println!("kanarie payload: {:?}", payload);
 
     let body = content::map(
         serde_json::from_str(&mappings).unwrap(),
@@ -42,20 +40,22 @@ pub fn map(task: DsgTask, mappings: &str) -> DsgMapped {
         &task.post_type
     );
 
-    // log::info!("kanarie body: {:?}", body);
+   // let body = "".to_string();
 
     let item = DsgContentItem {
-        title: payload["title"].to_string().replace("\"",""),
-        slug: payload["slug"].to_string().replace("\"",""), // to do: force unique value 
-        publication: task.publication.name.clone(),
+
         author: task.author.name.clone(),
-        post_type: task.post_type.clone(),
-        tags: payload["tags"].as_array().unwrap().iter().map( |s|  s.to_string()).collect::<Vec<_>>().join(","),
         categories: payload["categories"].as_array().unwrap().iter().map( |s| s.to_string()).collect::<Vec<_>>().join(","),
-        parent: payload["parent"].to_string().replace("\"",""),
+        content_cid: "".to_string(),
         creation_date: payload["creation_date"].to_string().replace("\"",""),
+        id: payload["id"].to_string().replace("\"",""),
         modified_date: payload["modified_date"].to_string().replace("\"",""),
-        content_cid: "".to_string()
+        parent: payload["parent"].to_string().replace("\"",""),
+        post_type: task.post_type.clone(),
+        publication: task.publication.name.clone(),
+        slug: payload["slug"].to_string().replace("\"",""), // to do: force unique value 
+        tags: payload["tags"].as_array().unwrap().iter().map( |s|  s.to_string()).collect::<Vec<_>>().join(","),
+        title: payload["title"].to_string().replace("\"",""),
     };
 
     DsgMapped {
@@ -75,46 +75,28 @@ pub fn includeCid(mut content: DsgContentItem, cid: String) -> DsgContentItem {
 }
 
 #[marine]
-pub fn pebble(task: DsgTask, contentItem: DsgContentItem) -> Vec<DsgRenderObject> {
+pub fn pebble(task: DsgTask, contentItem: DsgContentItem) -> DsgRenderObject{
 
-    let mut renderObjects : Vec<DsgRenderObject> = vec!();
-
-    let renderObject = DsgRenderObject {
+    DsgRenderObject {
         name: contentItem.slug.clone(),
         post_type: task.post_type.clone(),
         template : task.publication.mapping.clone().into_iter().find( |m| m.reference == task.post_type.clone()).unwrap(),
         publication_name : task.publication.name.clone(),
         domain: task.publication.domains[0].clone(),
         body_cid: contentItem.content_cid
-    };
-
-    renderObjects.push(renderObject);
-
-    println!("pebbled");
-    
-    renderObjects
+    }
 }
 
 #[marine]
-pub fn ripple(task: DsgTask, ripple: DsgRipple, contentItem: DsgContentItem) -> Vec<DsgRenderObject> {
+pub fn ripple(task: DsgTask, ripple: DsgRipple, contentItem: DsgContentItem) -> DsgRenderObject {
 
-    // let c : TuContentItem = serde_json::from_str(&contentItem).unwrap();
-
-    let mut renderObjects : Vec<DsgRenderObject> = vec!();
-
-    let rippleOject = DsgRenderObject {
+    DsgRenderObject {
         name: contentItem.slug.clone(),
         post_type: ripple.post_type.clone(),
         template : task.publication.mapping.clone().into_iter().find( |m| m.reference == ripple.post_type.clone()).unwrap(),
         publication_name : task.publication.name.clone(),
         domain: task.publication.domains[0].clone(),
         body_cid: contentItem.content_cid
-    };
-
-    renderObjects.push(rippleOject);
-    
-    println!("rippled");
-
-    renderObjects
+    }
 
 }

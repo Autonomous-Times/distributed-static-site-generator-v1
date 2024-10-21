@@ -57,20 +57,22 @@ pub struct DsgDomain {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DsgTable {
     pub id : String,
-    pub gateway: String,
-    pub owner: String
+    pub gateway: String
 }
 
 #[marine]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DsgPublication {
     pub assets: String,
+    pub contract: String,
+    pub controller: String,
     pub domains: Vec<DsgDomain>,
-    pub governor: String,
     pub mapping: Vec<DsgTemplate>,
     pub name: String,
+    pub storage: String,
+    pub table: DsgTable,
     pub templates: String,
-    pub table: DsgTable
+    pub rpc: String
 }
 
 #[marine]
@@ -87,28 +89,30 @@ pub struct DsgRenderObject {
 #[marine]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DsgTask {
-    pub slug: String,
     pub author: DsgAuthorData,
+    pub hash: String,
+    pub items: Vec<DsgRenderObject>,
     pub payload: String,
-    pub post_type: String, // Vec<u8>
-    pub publication: DsgPublication // cid? 
+    pub post_type: String, 
+    pub publication: DsgPublication,
+    pub slug: String,
 }
 
 #[marine]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DsgContentItem {
-    // pub id: String,
-    pub title: String,
-    pub slug: String,
-    pub publication: String,
     pub author: String,
-    pub post_type: String,
-    pub tags: String,
     pub categories: String,
-    pub parent: String,
+    pub content_cid: String,
     pub creation_date: String,
+    pub id: String,
     pub modified_date: String,
-    pub content_cid: String
+    pub parent: String,
+    pub post_type: String,
+    pub publication: String,
+    pub slug: String,
+    pub tags: String,
+    pub title: String
 }
 
 impl DsgContentItem {

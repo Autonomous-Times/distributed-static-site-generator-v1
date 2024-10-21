@@ -5,7 +5,7 @@ name = "cio_tableland_effector"
 load_from = "/home/joera/Documents/dsg/fluence/src/services/tuContentStore/modules/cio-tableland-effector/cio_tableland_effector.wasm"
 
   [module.mounted_binaries]
-  ipfs = "/usr/bin/curl"
+  curl = "/usr/bin/curl"
 
 [module.wasi.mapped_dirs]
 "/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/tuContentStore/service/tmp"

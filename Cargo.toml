@@ -1,12 +1,13 @@
 [workspace]
 members = [
   "src/services/tuContentStore/modules/tuContentStore",
-  "src/services/tuDsgRenderer/modules/tuDsgRenderer",
   "src/services/tuDsgWebHost/modules/tuDsgWebHost",
   "src/services/cio-pinata/modules/cio-pinata",
   "src/services/nPublication/modules/facade",
-  "src/services/nPublication/modules/cio-evm",
   "src/services/cioConsensus/cioConsensus",
   "src/services/dsgContent/modules/dsgContent",
-  "src/services/cio-kubo/modules/cioKubo"
+  "src/services/cio-kubo/modules/cioKubo",
+  "src/services/dsgRenderer/modules/dsgRenderer",
+  "src/services/cioSigner/cioSigner",
+  "src/services/cioSafe/modules/safe-facade"
 ]

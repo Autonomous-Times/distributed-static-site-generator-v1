@@ -1,17 +1,6 @@
 total_memory_limit = "2GB"
 
 [[module]]
-name = "cio_evm"
-load_from = "/home/joera/Documents/dsg/fluence/target/wasm32-wasi/release/cio_evm.wasm"
-
-[module.wasi.mapped_dirs]
-"/tmp" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/nPublication/service/tmp"
-"/storage" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/nPublication/service/storage"
-"/tmp/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/nPublication/modules/cio_evm/tmp/module"
-"/storage/module" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/services/nPublication/modules/cio_evm/storage/module"
-"/tmp/vault" = "/home/joera/Documents/dsg/fluence/.fluence/tmp/volumes/particles"
-
-[[module]]
 name = "curl_effector"
 load_from = "/home/joera/Documents/dsg/fluence/src/services/nPublication/modules/curl-effector/curl_effector.wasm"
 

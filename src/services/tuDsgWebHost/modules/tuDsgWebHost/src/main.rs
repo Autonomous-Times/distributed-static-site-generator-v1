@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
 use marine_rs_sdk::marine;
 use marine_rs_sdk::module_manifest;
-use cio_curl_effector_imports as curl;
-use cio_curl_effector_imports::{CurlRequest,HttpHeader};
+use curl_effector_imports as curl;
+use curl_effector_imports::{CurlRequest,HttpHeader};
 use tu_dsg_types::{ DsgPublication }; 
 use cio_response_types::{AMResponse};   
 use std::fs;

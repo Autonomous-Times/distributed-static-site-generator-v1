@@ -12,27 +12,249 @@ import "./dsg_helpers.aqua"
 
 -- import Spell, Log from "../../.fluence/aqua-dependencies/node_modules/@fluencelabs/spell/spell_service.aqua"
 
-export test -- renderOnDSG, bulkUpload, bulkRender, subnet -- , evm
+export provision, test, read, bulkrender, remove -- renderOnDSG, bulkUpload, bulkRender, subnet -- , evm
 
-func somefn() -> string:
+func read() -> *AMResponse:
+    res: *AMResponse
+    ws = getWebHostWorkers()
+    on ws!.worker_id! via ws!.host_id: 
+        res <- Npublication.read(PUBLICATION_ADDRESS, "config", "[]", RPC_URL)
 
-    b: *string
-    b <<- "kip"
+    <- res 
 
-    <- b!
+func test() -> string: 
 
-func test() -> string:
+    CID = "bafygo"
+
+    raw_txs: *string
+    signatures: *string
+    signed: *string
+    addresses: *string
+    check_address: *string
+
+    ws = getWebHostWorkers()
+
+    on ws!.worker_id! via ws!.host_id: 
+        addresses <- CioSigner.public_address() 
+
+    Console.print(addresses!)
+
+    for w <- ws par: 
+        on w.worker_id! via w.host_id: 
+            raw_txs <- Npublication.prep_write(
+                CHAIN_ID,
+                PUBLICATION_ADDRESS,
+                "updateHtmlRoot(string _html_root)",
+                Debug.stringify([CID]),
+                addresses!,
+                RPC_URL
+            )
+    join raw_txs!
+
+    Console.print(raw_txs!)
+  
+    on ws!.worker_id! via ws!.host_id: 
+        check_address <- CioSigner.public_address()
+        signatures <- CioSigner.rawtx(raw_txs!, CHAIN_ID) 
+
+    Console.print(check_address)
+  
+    Console.print(signatures!)
+
+    on ws!.worker_id! via ws!.host_id: 
+        signed <- Npublication.exec_write(raw_txs!, signatures, RPC_URL)
+
+    <- signed!
+
+
+func provision() -> *string:
+
+    addresses: *string
+    ws = getWebHostWorkers()
+
+    keys = ["1128ab3ec46956e801f3316df39316f57a24c31bdaafc0ce35edc59312b90b7d",
+            "e0f4ed7ea095d59270007c6dba78e73b03495f86e7f426f867841d9c3384eaef",
+            "068993f9dfe2b9d553a609af2fee9d24ecc400832440c452ced26ff0c9d7e45d"
+           ]
+
+    i: *u8
+
+    for w <- ws: 
+        on w.worker_id! via w.host_id: 
+            addresses <- CioSigner.provision(keys[i.length])
+        i <<- 1
     
-    r: *string
-    array = [1,2,3,4,5]
-    for i <- array:
-        res:  *string
-        res <- somefn()
-        par res <- Peer.timeout(1000,"some spacetime")
-        Console.print(res!)
-        if res! != "some spacetime":
-            r <<- "hi"
-    <- r!
+    <- addresses 
+
+func neutral() -> string:
+
+    -- 0x7e7fA535Ad83D2c74984C7067B0C0b335C1b3308
+
+    raw_txs: *string
+    signatures: *string
+    signed: *string
+
+    ws = getWebHostWorkers()
+    addresses: *string
+    for w <- ws: 
+        on w.worker_id! via w.host_id: 
+            addresses <- CioSigner.public_address()
+
+    Console.print(addresses!)
+    Console.print(addresses[1])
+    Console.print(addresses[2])
+
+    for w <- ws par: 
+        on w.worker_id! via w.host_id: 
+            raw_txs <- CioSafe.tx_request(
+                addresses!,
+                CHAIN_ID,
+                SAFE_FACTORY,
+                RPC_URL,
+                addresses,
+                2
+            )
+    join raw_txs!
+
+    Console.print(raw_txs!)
+
+    for w <- ws par: 
+        on w.worker_id! via w.host_id: 
+            signatures <- CioSigner.rawtx(raw_txs!,CHAIN_ID) 
+    join signatures[2]
+
+    Console.print(signatures!)
+    Console.print(signatures[1])
+    Console.print(signatures[2])
+
+    on ws!.worker_id! via ws!.host_id: 
+        signed <- CioSafe.exec_tx(raw_txs!, signatures, RPC_URL)
+
+    <- signed!
+
+func bulkrender(publication_cid: string, post_type: string, limit: u32, offset: u32) -> string:
+
+    -- author needs to be included in queriable item
+        publications: *DsgPublication
+        amrs: *AMResponse
+        roots: *string
+        results: *AquaMarineResult
+        citems: *[]DsgContentItem
+
+        ws = getTaskWorkers()
+        on ws!.worker_id! via ws!.host_id:
+            getConfig = Npublication.read(publication_cid, "config() external view returns (string cid)", "[]", RPC_URL)
+            publication_string = CioKubo.get(WEBHOSTKUBO, getConfig.result)
+            publications <- DsgPublicationFromJson.parse(publication_string)
+
+        publication = publications!
+        rs <- getRenderWorkers() 
+        on rs!.worker_id! via rs!.host_id:
+            downloads: *string
+            getRoot = Npublication.read(publication.contract, "html_root() external view returns (string cid)", "[]", publication.rpc)
+            downloads <- CioKubo.getRecursive(WEBHOSTKUBO, getRoot.result, publication.name) 
+            downloads <- CioKubo.getRecursive(WEBHOSTKUBO, publication.templates, "templates")
+            amrs <- ContentStore.queryPostType(post_type, publication.table, limit, offset) 
+            citems <- DsgContentItemsFromJson.parse(amrs!.result)
+
+        for ci <- citems!: 
+            on rs!.worker_id! via rs!.host_id:
+                body = CioKubo.get(WEBHOSTKUBO, ci.content_cid)
+                template = DsgRenderer.template(publication,post_type)
+                ro = DsgRenderObject (
+                    name = ci.slug, 
+                    post_type = post_type,
+                    template = template,
+                    publication_name = publication.name, 
+                    domain = publication.domains!, 
+                    body_cid = ""
+                )
+                collections: *[]DsgContentItem
+                for c <- ro.template.collections:
+                    if c.source == "tableland":
+                        amrs <- ContentStore.queryCollection(c, publication.table) 
+                        collections <- DsgContentItemsFromJson.parse(lastAMRResult(amrs))
+                templateDataResult = DsgRenderer.map(ro, body, collections, publication)
+                results <- DsgRenderer.single(ro, templateDataResult.output!)
+            Console.print(ci.slug)
+
+        on rs!.worker_id! via rs!.host_id:
+            roots  <- CioKubo.addRecursive(WEBHOSTKUBO,publication.name)
+
+        -- Console.print(citems)
+
+        -- for result <- results:
+        --     Console.print(result)
+
+        root = roots!
+        Console.print(root)
+
+        txs: *string
+
+        whs <- getWebHostWorkers()
+        on whs!.worker_id! via whs!.host_id:
+
+            s <- DsgWebHost.update(publication, root)
+
+            my_address = CioSigner.public_address()
+
+            raw_tx = Npublication.prep_write(
+                CHAIN_ID,
+                publication.contract, 
+                "updateHtmlRoot(string _html_root)", 
+                Debug.stringify([root]), 
+                my_address,
+                publication.rpc
+            )
+
+            signatures: *string
+            signatures <- CioSigner.rawtx(raw_tx, CHAIN_ID) 
+
+            txs <- Npublication.exec_write(raw_tx, signatures, publication.rpc)
+           
+
+        <- txs!
+
+func remove(publication_cid: string, item_id: string) -> bool:
+
+    -- ownership protected by table key .. that is controlled by printer 
+
+    publications: *DsgPublication
+    amrs: *AMResponse
+
+    ws = getTaskWorkers()
+    on ws!.worker_id! via ws!.host_id:
+        getConfig = Npublication.read(publication_cid, "config() external view returns (string cid)", "[]", RPC_URL)
+        publication_string = CioKubo.get(WEBHOSTKUBO, getConfig.result)
+        publications <- DsgPublicationFromJson.parse(publication_string)
+
+    publication = publications!
+
+    Console.print(item_id)
+
+    cws <- getContentWorkers() 
+    on cws!.worker_id! via cws!.host_id:
+        amrs <- ContentStore.deleteItem(item_id, publication.table)
+
+    Console.print(amrs)
+
+    <- true
+
+
+
+
+-- func test() -> string:
+    
+--     r: *string
+--     array = [1,2,3,4,5]
+--     for i <- array:
+--         res:  *string
+--         res <- somefn()
+--         par res <- Peer.timeout(1000,"some spacetime")
+--         Console.print(res!)
+--         if res! != "some spacetime":
+--             r <<- "hi"
+--     <- r!
 
 -- func subnet() -> bool: 
 

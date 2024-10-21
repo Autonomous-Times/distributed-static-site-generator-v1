@@ -8,77 +8,41 @@ version: 1
 
 deals:
   {
-    local:
-      {
-        taskWorkerV1:
-          {
-            definition: bafkreifzneee4hcyotixialxko7vtlb2kli6jzepzlisqetsmkjedz2pke,
-            timestamp: 2024-07-10T16:37:11.607Z,
-            dealIdOriginal: "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
-            dealId: ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b,
-            chainNetworkId: 31337
-          },
-        contentWorkerV1:
-          {
-            definition: bafkreiawg3lgvov7sjs56gy2kv5unzo44pcuphsjgrjoddbw7gsrruxida,
-            timestamp: 2024-07-10T16:37:15.901Z,
-            dealIdOriginal: "0x18998c7E38ede4dF09cEec08E5372Bf8fe5719ea",
-            dealId: 18998c7e38ede4df09ceec08e5372bf8fe5719ea,
-            chainNetworkId: 31337
-          },
-        renderWorkerV0:
-          {
-            definition: bafkreid5xgoipgm24xgdtw4yfms5mpuarmlmyqmwj7qicxmltrz4ammvqi,
-            timestamp: 2024-07-10T16:37:20.176Z,
-            dealIdOriginal: "0x2901bb75a1f4B0ac205CB2e68986A53E3480eB56",
-            dealId: 2901bb75a1f4b0ac205cb2e68986a53e3480eb56,
-            chainNetworkId: 31337
-          },
-        webHostWorkerV0:
-          {
-            definition: bafkreicxactzea2wqqiz2qt5gj4pavo626kmpmqg6bz7432kkmjd7ug53q,
-            timestamp: 2024-07-09T16:47:34.398Z,
-            dealIdOriginal: "0x541Dfe503202b78c5d78FaCd6CDB0a04D4b35634",
-            dealId: 541dfe503202b78c5d78facd6cdb0a04d4b35634,
-            chainNetworkId: 31337,
-            matched: true
-          }
-      },
     custom:
       {
         taskWorkerV1:
           {
-            definition: bafkreiejs5moyu7nj4syorhlvmtrji4mxf4ttxoajxrtxbcrdzuuziqs2m,
-            timestamp: 2024-07-10T06:11:17.037Z,
-            dealIdOriginal: "0xfeFB65f7A52c3d7C90196d2FeaefEf6a9A7A50b8",
-            dealId: fefb65f7a52c3d7c90196d2feaefef6a9a7a50b8,
+            definition: bafkreidktt7rjpj533davouup3gsvwk66urxr7oygotkb6vmc2orrm7lr4,
+            timestamp: 2024-10-12T07:38:33.122Z,
+            dealIdOriginal: "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
+            dealId: ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b,
             chainNetworkId: 31337,
             matched: true
           },
         contentWorkerV1:
           {
-            definition: bafkreifzbdepgey3b6wvh7wkezkds4pz7ejcsrtpwsqd65tnldfynae4ym,
-            timestamp: 2024-07-10T06:11:29.928Z,
-            dealIdOriginal: "0xF953091ceC3F278c76D574bFa505cdC329c36766",
-            dealId: f953091cec3f278c76d574bfa505cdc329c36766,
+            definition: bafkreigl6efgnc5ksfozruesb6l3mjtuoztf5lzqlgefrsych3xgamqc6u,
+            timestamp: 2024-10-12T07:38:41.872Z,
+            dealIdOriginal: "0x18998c7E38ede4dF09cEec08E5372Bf8fe5719ea",
+            dealId: 18998c7e38ede4df09ceec08e5372bf8fe5719ea,
             chainNetworkId: 31337,
             matched: true
           },
-        renderWorkerV0:
+        renderWorkerV1:
           {
-            definition: bafkreidlfjsthrzmhncej3g3f5ol3zkmewayzrcm2fqcxontgkswutqesi,
-            timestamp: 2024-07-10T06:11:42.685Z,
-            dealIdOriginal: "0xe06a12225d1CA8C6fC10969F35C61887985Ba8cC",
-            dealId: e06a12225d1ca8c6fc10969f35c61887985ba8cc,
+            definition: bafkreig5yj7cfqdtrbnqh7qs2ehfxfktkgx7va6obfi6tmk4qknc3o2g3i,
+            timestamp: 2024-10-12T07:38:54.480Z,
+            dealIdOriginal: "0x2901bb75a1f4B0ac205CB2e68986A53E3480eB56",
+            dealId: 2901bb75a1f4b0ac205cb2e68986a53e3480eb56,
             chainNetworkId: 31337,
             matched: true
           },
-        webHostWorkerV0:
+        webHostWorkerV1:
           {
-            definition: bafkreicxactzea2wqqiz2qt5gj4pavo626kmpmqg6bz7432kkmjd7ug53q,
-            timestamp: 2024-07-10T06:11:55.312Z,
-            dealIdOriginal: "0x7735cf2C955d25a8F5Ceb9802c313Ef09DfD4cB3",
-            dealId: 7735cf2c955d25a8f5ceb9802c313ef09dfd4cb3,
+            definition: bafkreiemqriysrccogswgmmta7c3jz4dsx732djuwk2qqad5dvkfzsmwjm,
+            timestamp: 2024-10-12T07:39:07.084Z,
+            dealIdOriginal: "0x541Dfe503202b78c5d78FaCd6CDB0a04D4b35634",
+            dealId: 541dfe503202b78c5d78facd6cdb0a04d4b35634,
             chainNetworkId: 31337,
             matched: true
           }

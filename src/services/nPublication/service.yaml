@@ -11,7 +11,7 @@ name: nPublication
 modules:
   facade:
     get: modules/facade
-  cio_evm:
-    get: modules/cio-evm
+  # cio_evm:
+  #   get: modules/cio-evm
   curl_effector:
     get: modules/curl-effector
